@@ -9,18 +9,22 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 import { destinationsData, categories } from '../constants/destinationsData';
 import { CategoryPill } from '../components/CategoryPill';
 import { DestinationCard } from '../components/DestinationCard';
 import { LocationPrompt } from '../components/LocationPrompt';
-import { useAuth } from '../context/AuthContext';
+import { SmartMatcherModal } from '../components/SmartMatcherModal';
 
 export const HomeScreen = ({ navigation }) => {
+  const { theme } = useTheme();
+  const { user, setIsLoginModalVisible, setAuthMode } = useAuth();
+
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [userLocation, setUserLocation] = useState('Hyderabad, India');
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const { user, setIsLoginModalVisible } = useAuth();
+  const [isMatcherModalOpen, setIsMatcherModalOpen] = useState(false);
 
   const filteredDestinations =
     selectedCategory === 'All'
@@ -30,12 +34,21 @@ export const HomeScreen = ({ navigation }) => {
   const featuredDestinations = destinationsData.filter((item) => item.featured);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Location Access Permission Prompt */}
       <LocationPrompt
         visible={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
         onPermissionGranted={(loc) => setUserLocation(loc)}
+      />
+
+      {/* Smart Destination Matcher Modal (Extension Enhancement) */}
+      <SmartMatcherModal
+        visible={isMatcherModalOpen}
+        onClose={() => setIsMatcherModalOpen(false)}
+        onSelectDestination={(dest) =>
+          navigation.navigate('Details', { destination: dest })
+        }
       />
 
       <ScrollView
@@ -47,25 +60,42 @@ export const HomeScreen = ({ navigation }) => {
           <View style={styles.headerLeft}>
             {/* Location Selector Chip */}
             <TouchableOpacity
-              style={styles.locationSelector}
+              style={[
+                styles.locationSelector,
+                {
+                  backgroundColor: theme.primaryLight,
+                  borderColor: theme.cardBorder,
+                },
+              ]}
               onPress={() => setIsLocationModalOpen(true)}
               activeOpacity={0.8}
             >
-              <Ionicons name="location-sharp" size={14} color={colors.primary} />
-              <Text style={styles.locationCityText}>{userLocation}</Text>
-              <Ionicons name="chevron-down" size={13} color={colors.primary} />
+              <Ionicons name="location-sharp" size={14} color={theme.primary} />
+              <Text style={[styles.locationCityText, { color: theme.primary }]}>
+                {userLocation}
+              </Text>
+              <Ionicons name="chevron-down" size={13} color={theme.primary} />
             </TouchableOpacity>
 
-            <Text style={styles.mainHeading}>Incredible India</Text>
+            <Text style={[styles.mainHeading, { color: theme.textHeading }]}>
+              Incredible India
+            </Text>
           </View>
 
           {/* User Profile / Sign In Quick Button */}
           <TouchableOpacity
-            style={styles.avatarButton}
+            style={[
+              styles.avatarButton,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
             onPress={() => {
               if (user) {
                 navigation.navigate('ProfileTab');
               } else {
+                setAuthMode('login');
                 setIsLoginModalVisible(true);
               }
             }}
@@ -73,7 +103,7 @@ export const HomeScreen = ({ navigation }) => {
             {user?.avatar ? (
               <Image source={{ uri: user.avatar }} style={styles.avatarMini} />
             ) : (
-              <Ionicons name="person" size={20} color={colors.primary} />
+              <Ionicons name="person" size={20} color={theme.primary} />
             )}
           </TouchableOpacity>
         </View>
@@ -81,52 +111,87 @@ export const HomeScreen = ({ navigation }) => {
         {/* Live Search Shortcut */}
         <TouchableOpacity
           activeOpacity={0.9}
-          style={styles.searchBar}
+          style={[
+            styles.searchBar,
+            {
+              backgroundColor: theme.cardSurface,
+              borderColor: theme.cardBorder,
+            },
+          ]}
           onPress={() => navigation.navigate('SearchTab')}
         >
           <Ionicons
             name="search-outline"
             size={18}
-            color={colors.primary}
+            color={theme.primary}
             style={styles.searchIcon}
           />
-          <Text style={styles.searchPlaceholder}>
+          <Text style={[styles.searchPlaceholder, { color: theme.textMuted }]}>
             Search beaches, mountain retreats, temples & safari...
           </Text>
-          <View style={styles.filterChip}>
-            <Ionicons name="options-outline" size={16} color={colors.primary} />
+          <View
+            style={[styles.filterChip, { backgroundColor: theme.primaryLight }]}
+          >
+            <Ionicons name="options-outline" size={16} color={theme.primary} />
           </View>
         </TouchableOpacity>
 
-        {/* Hero Wonder Banner */}
-        <View style={styles.heroBanner}>
-          <View style={styles.heroCardContent}>
-            <View style={styles.heroTagBadge}>
-              <Text style={styles.heroTagText}>CURATED WONDER</Text>
-            </View>
-            <Text style={styles.heroTitle}>Discover Jaipur</Text>
-            <Text style={styles.heroSubtitle}>
-              Pink sandstone palaces, royal hilltop forts and living Rajput splendor.
-            </Text>
-            <TouchableOpacity
-              activeOpacity={0.85}
-              style={styles.heroButton}
-              onPress={() => {
-                const jaipur = destinationsData.find((d) => d.name === 'Jaipur');
-                if (jaipur) navigation.navigate('Details', { destination: jaipur });
-              }}
+        {/* Smart Destination Matcher Highlight Banner */}
+        <TouchableOpacity
+          activeOpacity={0.92}
+          style={[
+            styles.matcherBanner,
+            {
+              backgroundColor: theme.cardSurface,
+              borderColor: theme.cardBorder,
+            },
+          ]}
+          onPress={() => setIsMatcherModalOpen(true)}
+        >
+          <View style={styles.matcherContent}>
+            <View
+              style={[
+                styles.matcherBadge,
+                { backgroundColor: theme.primaryLight },
+              ]}
             >
-              <Text style={styles.heroButtonText}>Explore Wonder</Text>
-              <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
-            </TouchableOpacity>
+              <Ionicons name="sparkles" size={12} color={theme.primary} />
+              <Text style={[styles.matcherBadgeText, { color: theme.primary }]}>
+                RECOMMENDED ENHANCEMENT
+              </Text>
+            </View>
+
+            <Text style={[styles.matcherTitle, { color: theme.textHeading }]}>
+              Smart Destination Matcher
+            </Text>
+            <Text style={[styles.matcherSubtitle, { color: theme.textBody }]}>
+              Filter by budget, trip duration, and companions (seniors, young adults, or families) for personalized recommendations!
+            </Text>
+
+            <View
+              style={[
+                styles.matcherActionPill,
+                { backgroundColor: theme.primary },
+              ]}
+            >
+              <Ionicons name="options" size={15} color="#FFFFFF" />
+              <Text style={styles.matcherActionPillText}>
+                Match My Trip Preferences
+              </Text>
+              <Ionicons name="arrow-forward" size={14} color="#FFFFFF" />
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Explore Categories Horizontal Filter */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Explore Categories</Text>
+          <Text style={[styles.sectionTitle, { color: theme.textHeading }]}>
+            Explore Categories
+          </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SearchTab')}>
-            <Text style={styles.sectionAction}>View All ({categories.length})</Text>
+            <Text style={[styles.sectionAction, { color: theme.primary }]}>
+              View All ({categories.length})
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -149,8 +214,10 @@ export const HomeScreen = ({ navigation }) => {
         {selectedCategory === 'All' && (
           <View style={styles.featuredSection}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Featured Getaways</Text>
-              <Text style={styles.sectionBadge}>
+              <Text style={[styles.sectionTitle, { color: theme.textHeading }]}>
+                Featured Getaways
+              </Text>
+              <Text style={[styles.sectionBadge, { color: theme.textMuted }]}>
                 {featuredDestinations.length} hand-picked
               </Text>
             </View>
@@ -176,12 +243,12 @@ export const HomeScreen = ({ navigation }) => {
 
         {/* Destinations Discovery List */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>
+          <Text style={[styles.sectionTitle, { color: theme.textHeading }]}>
             {selectedCategory === 'All'
               ? 'All Travel Destinations'
               : `${selectedCategory} Getaways`}
           </Text>
-          <Text style={styles.sectionBadge}>
+          <Text style={[styles.sectionBadge, { color: theme.textMuted }]}>
             {filteredDestinations.length} destinations
           </Text>
         </View>
@@ -206,7 +273,6 @@ export const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -227,24 +293,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#FDEEF1',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 14,
     gap: 5,
     borderWidth: 1,
-    borderColor: '#F1D8DF',
     marginBottom: 4,
   },
   locationCityText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primary,
   },
   mainHeading: {
     fontSize: 28,
     fontWeight: '800',
-    color: colors.textHeading,
     marginTop: 2,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
@@ -252,12 +314,10 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1.5,
-    borderColor: '#F1DCE0',
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.08,
     shadowRadius: 6,
@@ -271,14 +331,12 @@ const styles = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginBottom: 20,
+    marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#F0DCE0',
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
@@ -290,80 +348,73 @@ const styles = StyleSheet.create({
   searchPlaceholder: {
     flex: 1,
     fontSize: 12,
-    color: colors.textMuted,
     fontWeight: '500',
   },
   filterChip: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#FCEEF1',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  heroBanner: {
-    backgroundColor: '#FAF0F2',
-    borderRadius: 28,
-    padding: 20,
-    marginBottom: 22,
+  matcherBanner: {
+    borderRadius: 26,
+    padding: 18,
+    marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#F1D7DE',
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.08,
-    shadowRadius: 12,
+    shadowRadius: 10,
     elevation: 3,
   },
-  heroCardContent: {
+  matcherContent: {
     flexDirection: 'column',
   },
-  heroTagBadge: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#F3D8DE',
-    paddingHorizontal: 10,
+  matcherBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 9,
     paddingVertical: 4,
     borderRadius: 10,
+    alignSelf: 'flex-start',
+    gap: 4,
     marginBottom: 8,
   },
-  heroTagText: {
-    fontSize: 10,
+  matcherBadgeText: {
+    fontSize: 9,
     fontWeight: '800',
-    color: colors.primary,
     letterSpacing: 0.6,
   },
-  heroTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textHeading,
+  matcherTitle: {
+    fontSize: 20,
+    fontWeight: '800',
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
     marginBottom: 4,
   },
-  heroSubtitle: {
-    fontSize: 13,
-    lineHeight: 18,
-    color: colors.textBody,
-    marginBottom: 16,
+  matcherSubtitle: {
+    fontSize: 12,
+    lineHeight: 17,
+    marginBottom: 14,
   },
-  heroButton: {
+  matcherActionPill: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 22,
-    alignSelf: 'flex-start',
+    paddingVertical: 11,
+    paddingHorizontal: 18,
+    borderRadius: 20,
     gap: 8,
-    shadowColor: colors.primaryDark,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
+    alignSelf: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
-  heroButtonText: {
+  matcherActionPillText: {
     color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '700',
-    letterSpacing: 0.3,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -374,17 +425,14 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   sectionAction: {
     fontSize: 13,
     fontWeight: '600',
-    color: colors.primary,
   },
   sectionBadge: {
     fontSize: 12,
-    color: colors.textMuted,
     fontWeight: '600',
   },
   categoryScroll: {

@@ -9,22 +9,23 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { useWishlist } from '../context/WishlistContext';
 import { AttractionCard } from '../components/AttractionCard';
 
 export const DetailsScreen = ({ route, navigation }) => {
   const { destination } = route.params;
+  const { theme } = useTheme();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const favorited = isInWishlist(destination.id);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Hero Image Container with Back & Wishlist Controls */}
+        {/* Hero Image Container */}
         <View style={styles.imageContainer}>
           <Image
             source={{ uri: destination.image }}
@@ -32,14 +33,14 @@ export const DetailsScreen = ({ route, navigation }) => {
             resizeMode="cover"
           />
 
-          {/* Floating Navigation Buttons */}
+          {/* Floating Top Controls */}
           <View style={styles.floatingTopBar}>
             <TouchableOpacity
               activeOpacity={0.85}
               style={styles.circleButton}
               onPress={() => navigation.goBack()}
             >
-              <Ionicons name="arrow-back" size={20} color={colors.textHeading} />
+              <Ionicons name="arrow-back" size={20} color="#2F1B2F" />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -50,64 +51,188 @@ export const DetailsScreen = ({ route, navigation }) => {
               <Ionicons
                 name={favorited ? 'heart' : 'heart-outline'}
                 size={20}
-                color={favorited ? colors.heart : colors.textHeading}
+                color={favorited ? theme.heart : '#2F1B2F'}
               />
             </TouchableOpacity>
           </View>
 
-          {/* Category Tag pill on image */}
+          {/* Category Tag pill */}
           <View style={styles.categoryBadge}>
             <Text style={styles.categoryBadgeText}>{destination.category}</Text>
           </View>
         </View>
 
-        {/* Content Card with soft rounded top */}
-        <View style={styles.detailsCard}>
+        {/* Content Card */}
+        <View
+          style={[
+            styles.detailsCard,
+            { backgroundColor: theme.background },
+          ]}
+        >
           {/* Title & Tagline */}
-          <Text style={styles.destinationTitle}>{destination.name}</Text>
-          <Text style={styles.destinationTagline}>{destination.subtitle}</Text>
+          <Text style={[styles.destinationTitle, { color: theme.textHeading }]}>
+            {destination.name}
+          </Text>
+          <Text style={[styles.destinationTagline, { color: theme.primary }]}>
+            {destination.subtitle}
+          </Text>
 
-          {/* Location & Rating Row */}
-          <View style={styles.metaRow}>
+          {/* Location & Rating */}
+          <View
+            style={[
+              styles.metaRow,
+              { borderBottomColor: theme.cardBorder },
+            ]}
+          >
             <View style={styles.locationContainer}>
-              <Ionicons name="location-sharp" size={15} color={colors.primary} />
-              <Text style={styles.locationText}>{destination.location}</Text>
+              <Ionicons name="location-sharp" size={15} color={theme.primary} />
+              <Text style={[styles.locationText, { color: theme.textBody }]}>
+                {destination.location}
+              </Text>
             </View>
 
-            <View style={styles.ratingBadge}>
-              <Ionicons name="star" size={14} color={colors.star} />
-              <Text style={styles.ratingValue}>{destination.rating}</Text>
-              <Text style={styles.reviewCount}>({destination.reviews})</Text>
+            <View
+              style={[
+                styles.ratingBadge,
+                {
+                  backgroundColor: theme.cardSurface,
+                  borderColor: theme.cardBorder,
+                },
+              ]}
+            >
+              <Ionicons name="star" size={14} color={theme.star} />
+              <Text
+                style={[styles.ratingValue, { color: theme.textHeading }]}
+              >
+                {destination.rating}
+              </Text>
+              <Text style={[styles.reviewCount, { color: theme.textMuted }]}>
+                ({destination.reviews})
+              </Text>
             </View>
           </View>
 
-          {/* Stage 2 Requirement: Best Time to Visit Card */}
-          <View style={styles.highlightCard}>
-            <View style={styles.highlightIconBox}>
-              <Ionicons name="calendar" size={22} color={colors.primary} />
+          {/* Quick Metrics Cards */}
+          <View style={styles.metricsRow}>
+            {destination.budget && (
+              <View
+                style={[
+                  styles.metricCard,
+                  {
+                    backgroundColor: theme.cardSurface,
+                    borderColor: theme.cardBorder,
+                  },
+                ]}
+              >
+                <Ionicons name="wallet-outline" size={16} color={theme.primary} />
+                <Text style={[styles.metricLabel, { color: theme.textMuted }]}>
+                  Est. Budget
+                </Text>
+                <Text
+                  style={[styles.metricValue, { color: theme.textHeading }]}
+                >
+                  {destination.budget}
+                </Text>
+              </View>
+            )}
+
+            {destination.duration && (
+              <View
+                style={[
+                  styles.metricCard,
+                  {
+                    backgroundColor: theme.cardSurface,
+                    borderColor: theme.cardBorder,
+                  },
+                ]}
+              >
+                <Ionicons name="time-outline" size={16} color={theme.primary} />
+                <Text style={[styles.metricLabel, { color: theme.textMuted }]}>
+                  Duration
+                </Text>
+                <Text
+                  style={[styles.metricValue, { color: theme.textHeading }]}
+                >
+                  {destination.duration.split(' ')[0]}
+                </Text>
+              </View>
+            )}
+
+            {destination.pace && (
+              <View
+                style={[
+                  styles.metricCard,
+                  {
+                    backgroundColor: theme.cardSurface,
+                    borderColor: theme.cardBorder,
+                  },
+                ]}
+              >
+                <Ionicons name="speedometer-outline" size={16} color={theme.primary} />
+                <Text style={[styles.metricLabel, { color: theme.textMuted }]}>
+                  Trip Pace
+                </Text>
+                <Text
+                  style={[styles.metricValue, { color: theme.textHeading }]}
+                >
+                  {destination.pace}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          {/* Best Time to Visit Card */}
+          <View
+            style={[
+              styles.highlightCard,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
+          >
+            <View
+              style={[
+                styles.highlightIconBox,
+                { backgroundColor: theme.primaryLight },
+              ]}
+            >
+              <Ionicons name="calendar" size={22} color={theme.primary} />
             </View>
             <View style={styles.highlightTextBox}>
-              <Text style={styles.highlightLabel}>Best Time to Visit</Text>
-              <Text style={styles.highlightValue}>
+              <Text style={[styles.highlightLabel, { color: theme.primary }]}>
+                Best Time to Visit
+              </Text>
+              <Text
+                style={[styles.highlightValue, { color: theme.textHeading }]}
+              >
                 {destination.bestTimeToVisit}
               </Text>
             </View>
           </View>
 
-          {/* Destination Description */}
+          {/* Description */}
           <View style={styles.sectionBlock}>
-            <Text style={styles.sectionHeading}>About Destination</Text>
-            <Text style={styles.descriptionText}>
+            <Text style={[styles.sectionHeading, { color: theme.textHeading }]}>
+              About Destination
+            </Text>
+            <Text style={[styles.descriptionText, { color: theme.textBody }]}>
               {destination.fullDescription}
             </Text>
           </View>
 
-          {/* Stage 2 Requirement: 2-3 Popular Attractions */}
+          {/* Popular Attractions */}
           <View style={styles.sectionBlock}>
             <View style={styles.sectionHeaderRow}>
-              <Text style={styles.sectionHeading}>Popular Attractions</Text>
-              <Text style={styles.attractionCount}>
-                {destination.attractions.length} Must-Visits
+              <Text
+                style={[styles.sectionHeading, { color: theme.textHeading }]}
+              >
+                Popular Attractions
+              </Text>
+              <Text
+                style={[styles.attractionCount, { color: theme.primary }]}
+              >
+                {destination.attractions.length} Highlights
               </Text>
             </View>
 
@@ -124,13 +249,25 @@ export const DetailsScreen = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Floating Bottom Sticky Action Bar */}
-      <View style={styles.stickyFooter}>
+      {/* Sticky Bottom Action */}
+      <View
+        style={[
+          styles.stickyFooter,
+          {
+            backgroundColor: theme.background,
+            borderTopColor: theme.cardBorder,
+          },
+        ]}
+      >
         <TouchableOpacity
           activeOpacity={0.88}
           style={[
             styles.wishlistActionButton,
-            favorited ? styles.wishlistActionActive : styles.wishlistActionInactive,
+            {
+              backgroundColor: favorited
+                ? theme.secondary
+                : theme.primary,
+            },
           ]}
           onPress={() => toggleWishlist(destination)}
         >
@@ -141,7 +278,7 @@ export const DetailsScreen = ({ route, navigation }) => {
             style={styles.actionBtnIcon}
           />
           <Text style={styles.actionBtnText}>
-            {favorited ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            {favorited ? 'Remove from Saved' : 'Save to Wishlist'}
           </Text>
           <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
         </TouchableOpacity>
@@ -153,7 +290,6 @@ export const DetailsScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   scrollContent: {
     paddingBottom: 110,
@@ -194,7 +330,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     left: 20,
-    backgroundColor: 'rgba(54, 33, 55, 0.82)',
+    backgroundColor: 'rgba(34, 18, 35, 0.82)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -206,7 +342,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   detailsCard: {
-    backgroundColor: colors.background,
     borderTopLeftRadius: 36,
     borderTopRightRadius: 36,
     marginTop: -20,
@@ -216,12 +351,10 @@ const styles = StyleSheet.create({
   destinationTitle: {
     fontSize: 30,
     fontWeight: '800',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   destinationTagline: {
     fontSize: 14,
-    color: colors.primaryMuted,
     fontWeight: '600',
     marginTop: 2,
     marginBottom: 12,
@@ -230,10 +363,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 18,
+    marginBottom: 16,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F0D5DD',
   },
   locationContainer: {
     flexDirection: 'row',
@@ -242,39 +374,54 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 14,
-    color: colors.textBody,
     fontWeight: '600',
   },
   ratingBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 14,
     gap: 4,
     borderWidth: 1,
-    borderColor: '#F3DEE3',
   },
   ratingValue: {
     fontSize: 13,
     fontWeight: '700',
-    color: colors.textHeading,
   },
   reviewCount: {
     fontSize: 12,
-    color: colors.textMuted,
+  },
+  metricsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 18,
+  },
+  metricCard: {
+    flex: 1,
+    borderRadius: 18,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  metricLabel: {
+    fontSize: 10,
+    marginTop: 4,
+    fontWeight: '600',
+  },
+  metricValue: {
+    fontSize: 12,
+    fontWeight: '700',
+    marginTop: 2,
   },
   highlightCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     borderRadius: 22,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#F2D7DD',
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -284,7 +431,6 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 23,
-    backgroundColor: '#FDEEF1',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -295,14 +441,12 @@ const styles = StyleSheet.create({
   highlightLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   highlightValue: {
     fontSize: 15,
     fontWeight: '700',
-    color: colors.textHeading,
     marginTop: 2,
   },
   sectionBlock: {
@@ -317,19 +461,16 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
     marginBottom: 8,
   },
   attractionCount: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.primary,
   },
   descriptionText: {
     fontSize: 14,
     lineHeight: 22,
-    color: colors.textBody,
   },
   attractionsScroll: {
     paddingVertical: 6,
@@ -340,11 +481,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'rgba(248, 236, 236, 0.95)',
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderTopWidth: 1,
-    borderTopColor: '#F0D6DC',
   },
   wishlistActionButton: {
     flexDirection: 'row',
@@ -354,17 +493,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderRadius: 28,
     gap: 10,
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
-  },
-  wishlistActionActive: {
-    backgroundColor: colors.secondary,
-  },
-  wishlistActionInactive: {
-    backgroundColor: colors.primary,
   },
   actionBtnIcon: {
     marginRight: 4,

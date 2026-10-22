@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 const categoryIcons = {
   All: 'sparkles-outline',
@@ -9,11 +9,13 @@ const categoryIcons = {
   Mountains: 'trail-sign-outline',
   Heritage: 'business-outline',
   Adventure: 'compass-outline',
+  'Religious & Spiritual': 'flower-outline',
   Wildlife: 'paw-outline',
   Spiritual: 'flower-outline',
 };
 
 export const CategoryPill = ({ title, isSelected, onPress }) => {
+  const { theme } = useTheme();
   const iconName = categoryIcons[title] || 'earth-outline';
 
   return (
@@ -22,19 +24,29 @@ export const CategoryPill = ({ title, isSelected, onPress }) => {
       onPress={onPress}
       style={[
         styles.pill,
-        isSelected ? styles.pillSelected : styles.pillUnselected,
+        isSelected
+          ? {
+              backgroundColor: theme.primary,
+              borderColor: theme.primaryDark,
+            }
+          : {
+              backgroundColor: theme.cardSurface,
+              borderColor: theme.cardBorder,
+            },
       ]}
     >
       <Ionicons
         name={iconName}
-        size={16}
-        color={isSelected ? '#FFFFFF' : colors.textBody}
+        size={15}
+        color={isSelected ? '#FFFFFF' : theme.textBody}
         style={styles.icon}
       />
       <Text
         style={[
           styles.label,
-          isSelected ? styles.labelSelected : styles.labelUnselected,
+          {
+            color: isSelected ? '#FFFFFF' : theme.textHeading,
+          },
         ]}
       >
         {title}
@@ -47,38 +59,22 @@ const styles = StyleSheet.create({
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 24,
-    marginRight: 10,
+    paddingVertical: 9,
+    paddingHorizontal: 15,
+    borderRadius: 22,
+    marginRight: 9,
     borderWidth: 1,
-    // Claymorphic soft shadow
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 5,
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
     elevation: 2,
-  },
-  pillSelected: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primaryDark,
-  },
-  pillUnselected: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#F0DCE0',
   },
   icon: {
     marginRight: 6,
   },
   label: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    letterSpacing: 0.2,
-  },
-  labelSelected: {
-    color: '#FFFFFF',
-  },
-  labelUnselected: {
-    color: colors.textHeading,
   },
 });

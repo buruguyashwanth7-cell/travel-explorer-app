@@ -1,23 +1,43 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 export const AttractionCard = ({ attraction }) => {
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.card}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor: theme.cardSurface,
+          borderColor: theme.cardBorder,
+        },
+      ]}
+    >
       <Image
         source={{ uri: attraction.image }}
         style={styles.image}
         resizeMode="cover"
       />
       <View style={styles.content}>
-        <View style={styles.tagBadge}>
-          <Text style={styles.tagText}>{attraction.tag}</Text>
+        <View
+          style={[styles.tagBadge, { backgroundColor: theme.primaryLight }]}
+        >
+          <Text style={[styles.tagText, { color: theme.primary }]}>
+            {attraction.tag}
+          </Text>
         </View>
-        <Text style={styles.name} numberOfLines={1}>
+        <Text
+          style={[styles.name, { color: theme.textHeading }]}
+          numberOfLines={1}
+        >
           {attraction.name}
         </Text>
-        <Text style={styles.description} numberOfLines={2}>
+        <Text
+          style={[styles.description, { color: theme.textBody }]}
+          numberOfLines={2}
+        >
           {attraction.description}
         </Text>
       </View>
@@ -28,13 +48,11 @@ export const AttractionCard = ({ attraction }) => {
 const styles = StyleSheet.create({
   card: {
     width: 200,
-    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     overflow: 'hidden',
     marginRight: 14,
     borderWidth: 1,
-    borderColor: '#F3DEE3',
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -49,7 +67,6 @@ const styles = StyleSheet.create({
   },
   tagBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#FDF0F3',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -58,17 +75,14 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: colors.primary,
   },
   name: {
     fontSize: 15,
     fontWeight: '700',
-    color: colors.textHeading,
     marginBottom: 4,
   },
   description: {
     fontSize: 11,
     lineHeight: 15,
-    color: colors.textBody,
   },
 });

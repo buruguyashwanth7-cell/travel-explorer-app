@@ -1,35 +1,53 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import { AuthProvider } from './src/context/AuthContext';
 import { WishlistProvider } from './src/context/WishlistContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { MobileFrame } from './src/components/MobileFrame';
 import { LoginModal } from './src/components/LoginModal';
-import { colors } from './src/constants/colors';
+
+function MainApp() {
+  const { theme, isDarkMode } = useTheme();
+
+  return (
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <MobileFrame>
+        <StatusBar
+          style={isDarkMode ? 'light' : 'dark'}
+          backgroundColor={theme.background}
+        />
+        <AppNavigator />
+        <LoginModal />
+      </MobileFrame>
+    </View>
+  );
+}
 
 export default function App() {
   return (
-    <SafeAreaProvider style={styles.container}>
-      <AuthProvider>
-        <WishlistProvider>
-          <MobileFrame>
-            <StatusBar style="dark" backgroundColor={colors.background} />
-            <AppNavigator />
-            <LoginModal />
-          </MobileFrame>
-        </WishlistProvider>
-      </AuthProvider>
+    <SafeAreaProvider style={styles.safeArea}>
+      <ThemeProvider>
+        <AuthProvider>
+          <WishlistProvider>
+            <MainApp />
+          </WishlistProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    height: '100%',
+  },
   container: {
     flex: 1,
     height: '100%',
-    backgroundColor: colors.background,
   },
 });

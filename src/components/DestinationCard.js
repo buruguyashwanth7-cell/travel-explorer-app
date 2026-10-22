@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { useWishlist } from '../context/WishlistContext';
 
 export const DestinationCard = ({
@@ -16,6 +16,7 @@ export const DestinationCard = ({
   onPress,
   horizontal = false,
 }) => {
+  const { theme } = useTheme();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const favorited = isInWishlist(destination.id);
 
@@ -26,6 +27,10 @@ export const DestinationCard = ({
       style={[
         styles.card,
         horizontal ? styles.horizontalCard : styles.verticalCard,
+        {
+          backgroundColor: theme.cardSurface,
+          borderColor: theme.cardBorder,
+        },
       ]}
     >
       {/* Destination Image */}
@@ -45,7 +50,6 @@ export const DestinationCard = ({
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={(e) => {
-            // Prevent triggering card click
             e.stopPropagation?.();
             toggleWishlist(destination);
           }}
@@ -54,13 +58,13 @@ export const DestinationCard = ({
           <Ionicons
             name={favorited ? 'heart' : 'heart-outline'}
             size={18}
-            color={favorited ? colors.heart : '#FFFFFF'}
+            color={favorited ? theme.heart : '#FFFFFF'}
           />
         </TouchableOpacity>
 
         {/* Rating Floating Chip */}
         <View style={styles.ratingChip}>
-          <Ionicons name="star" size={13} color={colors.star} />
+          <Ionicons name="star" size={13} color={theme.star} />
           <Text style={styles.ratingText}>{destination.rating}</Text>
         </View>
       </View>
@@ -68,32 +72,48 @@ export const DestinationCard = ({
       {/* Destination Card Body */}
       <View style={styles.content}>
         <View style={styles.titleRow}>
-          <Text style={styles.title} numberOfLines={1}>
+          <Text
+            style={[styles.title, { color: theme.textHeading }]}
+            numberOfLines={1}
+          >
             {destination.name}
           </Text>
         </View>
 
         <View style={styles.locationRow}>
-          <Ionicons name="location-sharp" size={13} color={colors.primary} />
-          <Text style={styles.locationText} numberOfLines={1}>
+          <Ionicons name="location-sharp" size={13} color={theme.primary} />
+          <Text
+            style={[styles.locationText, { color: theme.textMuted }]}
+            numberOfLines={1}
+          >
             {destination.location}
           </Text>
         </View>
 
-        <Text style={styles.description} numberOfLines={2}>
+        <Text
+          style={[styles.description, { color: theme.textBody }]}
+          numberOfLines={2}
+        >
           {destination.shortDescription}
         </Text>
 
-        {/* Footer with Best Time to visit & Arrow */}
-        <View style={styles.cardFooter}>
-          <View style={styles.seasonBadge}>
-            <Ionicons name="calendar-outline" size={11} color={colors.primary} />
-            <Text style={styles.seasonText} numberOfLines={1}>
+        {/* Footer with Best Time & Arrow */}
+        <View
+          style={[styles.cardFooter, { borderTopColor: theme.cardBorder }]}
+        >
+          <View
+            style={[styles.seasonBadge, { backgroundColor: theme.primaryLight }]}
+          >
+            <Ionicons name="calendar-outline" size={11} color={theme.primary} />
+            <Text
+              style={[styles.seasonText, { color: theme.primary }]}
+              numberOfLines={1}
+            >
               {destination.bestTimeToVisit.split('&')[0].trim()}
             </Text>
           </View>
 
-          <View style={styles.arrowCircle}>
+          <View style={[styles.arrowCircle, { backgroundColor: theme.primary }]}>
             <Ionicons name="arrow-forward" size={15} color="#FFFFFF" />
           </View>
         </View>
@@ -104,13 +124,10 @@ export const DestinationCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
     borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F3DEE3',
-    // Soft pastel claymorphic drop shadow
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.08,
     shadowRadius: 10,
@@ -140,7 +157,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 12,
     left: 12,
-    backgroundColor: 'rgba(54, 33, 55, 0.75)',
+    backgroundColor: 'rgba(34, 18, 35, 0.78)',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 14,
@@ -158,12 +175,12 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'rgba(25, 12, 26, 0.65)',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
@@ -173,7 +190,7 @@ const styles = StyleSheet.create({
     right: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    backgroundColor: 'rgba(255, 255, 255, 0.94)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -182,7 +199,7 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.textHeading,
+    color: '#2F1B2F',
   },
   content: {
     padding: 16,
@@ -196,7 +213,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   locationRow: {
@@ -207,13 +223,11 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 13,
-    color: colors.textMuted,
     fontWeight: '500',
   },
   description: {
     fontSize: 13,
     lineHeight: 18,
-    color: colors.textBody,
     marginBottom: 12,
   },
   cardFooter: {
@@ -222,12 +236,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: '#F7E7EB',
   },
   seasonBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FDF1F3',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
@@ -236,14 +248,12 @@ const styles = StyleSheet.create({
   },
   seasonText: {
     fontSize: 11,
-    color: colors.primaryDark,
     fontWeight: '600',
   },
   arrowCircle: {
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

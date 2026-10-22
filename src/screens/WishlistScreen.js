@@ -9,48 +9,69 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { useWishlist } from '../context/WishlistContext';
 
 export const WishlistScreen = ({ navigation }) => {
+  const { theme } = useTheme();
   const { wishlist, removeFromWishlist } = useWishlist();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>My Travel Wishlist</Text>
-          <Text style={styles.subtitle}>
-            Your saved dream getaways across India
+          <Text style={[styles.title, { color: theme.textHeading }]}>
+            My Saved Places
+          </Text>
+          <Text style={[styles.subtitle, { color: theme.textBody }]}>
+            Your personal travel bucket list across India
           </Text>
         </View>
 
         {/* Counter Badge */}
         {wishlist.length > 0 && (
           <View style={styles.counterRow}>
-            <View style={styles.counterBadge}>
-              <Ionicons name="bookmark" size={13} color={colors.primary} />
-              <Text style={styles.counterText}>
+            <View
+              style={[
+                styles.counterBadge,
+                {
+                  backgroundColor: theme.primaryLight,
+                  borderColor: theme.cardBorder,
+                },
+              ]}
+            >
+              <Ionicons name="bookmark" size={13} color={theme.primary} />
+              <Text style={[styles.counterText, { color: theme.primary }]}>
                 {wishlist.length} {wishlist.length === 1 ? 'place' : 'places'} saved
               </Text>
             </View>
-            <Text style={styles.hintText}>Tap card for details</Text>
+            <Text style={[styles.hintText, { color: theme.textMuted }]}>
+              Tap card for complete itinerary
+            </Text>
           </View>
         )}
 
-        {/* Wishlist Items List (Stage 4 Requirement) */}
+        {/* Wishlist Items List */}
         {wishlist.length > 0 ? (
           <View style={styles.listContainer}>
             {wishlist.map((item) => (
               <TouchableOpacity
                 key={item.id}
                 activeOpacity={0.92}
-                style={styles.wishlistCard}
-                onPress={() => navigation.navigate('Details', { destination: item })}
+                style={[
+                  styles.wishlistCard,
+                  {
+                    backgroundColor: theme.cardSurface,
+                    borderColor: theme.cardBorder,
+                  },
+                ]}
+                onPress={() =>
+                  navigation.navigate('Details', { destination: item })
+                }
               >
                 <Image
                   source={{ uri: item.image }}
@@ -60,13 +81,26 @@ export const WishlistScreen = ({ navigation }) => {
 
                 <View style={styles.cardContent}>
                   <View style={styles.cardTopRow}>
-                    <View style={styles.tagBadge}>
-                      <Text style={styles.tagText}>{item.category}</Text>
+                    <View
+                      style={[
+                        styles.tagBadge,
+                        { backgroundColor: theme.primaryLight },
+                      ]}
+                    >
+                      <Text
+                        style={[styles.tagText, { color: theme.primary }]}
+                      >
+                        {item.category}
+                      </Text>
                     </View>
-                    {/* Delete / Remove Action Button */}
+
+                    {/* Remove Action Button */}
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      style={styles.removeBtn}
+                      style={[
+                        styles.removeBtn,
+                        { backgroundColor: theme.primaryLight },
+                      ]}
                       onPress={(e) => {
                         e.stopPropagation?.();
                         removeFromWishlist(item.id);
@@ -74,30 +108,51 @@ export const WishlistScreen = ({ navigation }) => {
                     >
                       <Ionicons
                         name="trash-outline"
-                        size={18}
-                        color={colors.primary}
+                        size={17}
+                        color={theme.primary}
                       />
                     </TouchableOpacity>
                   </View>
 
-                  <Text style={styles.destinationName}>{item.name}</Text>
-                  
+                  <Text
+                    style={[
+                      styles.destinationName,
+                      { color: theme.textHeading },
+                    ]}
+                  >
+                    {item.name}
+                  </Text>
+
                   <View style={styles.locationRow}>
                     <Ionicons
                       name="location-sharp"
                       size={12}
-                      color={colors.primary}
+                      color={theme.primary}
                     />
-                    <Text style={styles.locationText}>{item.location}</Text>
+                    <Text
+                      style={[styles.locationText, { color: theme.textMuted }]}
+                    >
+                      {item.location}
+                    </Text>
                   </View>
 
                   <View style={styles.footerRow}>
                     <View style={styles.ratingBox}>
-                      <Ionicons name="star" size={12} color={colors.star} />
-                      <Text style={styles.ratingNumber}>{item.rating}</Text>
+                      <Ionicons name="star" size={12} color={theme.star} />
+                      <Text
+                        style={[
+                          styles.ratingNumber,
+                          { color: theme.textHeading },
+                        ]}
+                      >
+                        {item.rating}
+                      </Text>
                     </View>
                     <View style={styles.seasonBox}>
-                      <Text style={styles.seasonText} numberOfLines={1}>
+                      <Text
+                        style={[styles.seasonText, { color: theme.textBody }]}
+                        numberOfLines={1}
+                      >
                         Best: {item.bestTimeToVisit.split('&')[0]}
                       </Text>
                     </View>
@@ -108,21 +163,38 @@ export const WishlistScreen = ({ navigation }) => {
           </View>
         ) : (
           <View style={styles.emptyContainer}>
-            <View style={styles.emptyIconCircle}>
+            <View
+              style={[
+                styles.emptyIconCircle,
+                {
+                  backgroundColor: theme.primaryLight,
+                  borderColor: theme.cardBorder,
+                },
+              ]}
+            >
               <Ionicons
                 name="heart-dislike-outline"
                 size={46}
-                color={colors.primary}
+                color={theme.primary}
               />
             </View>
-            <Text style={styles.emptyTitle}>Your Wishlist is Empty</Text>
-            <Text style={styles.emptyDescription}>
-              You haven't saved any destinations yet. Explore India's beautiful
-              beaches, mountains, heritage sites and adventure hubs!
+            <Text
+              style={[styles.emptyTitle, { color: theme.textHeading }]}
+            >
+              Your Wishlist is Empty
+            </Text>
+            <Text
+              style={[styles.emptyDescription, { color: theme.textMuted }]}
+            >
+              Save your dream beaches, Himalayan retreats, or holy temples by
+              tapping the heart icon on any card!
             </Text>
             <TouchableOpacity
               activeOpacity={0.88}
-              style={styles.exploreBtn}
+              style={[
+                styles.exploreBtn,
+                { backgroundColor: theme.primary },
+              ]}
               onPress={() => navigation.navigate('HomeTab')}
             >
               <Ionicons name="compass-outline" size={18} color="#FFFFFF" />
@@ -138,7 +210,6 @@ export const WishlistScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   scrollContent: {
     paddingHorizontal: 20,
@@ -151,12 +222,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: '800',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   subtitle: {
     fontSize: 13,
-    color: colors.textBody,
     marginTop: 4,
   },
   counterRow: {
@@ -168,34 +237,28 @@ const styles = StyleSheet.create({
   counterBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FCEEF1',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 12,
     gap: 6,
     borderWidth: 1,
-    borderColor: '#F2D9DF',
   },
   counterText: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.primary,
   },
   hintText: {
     fontSize: 11,
-    color: colors.textMuted,
   },
   listContainer: {
     gap: 14,
   },
   wishlistCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
     borderRadius: 22,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#F3DEE3',
-    shadowColor: colors.shadowColor,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.07,
     shadowRadius: 8,
@@ -216,7 +279,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tagBadge: {
-    backgroundColor: '#FDF0F3',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -224,17 +286,14 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: colors.primary,
   },
   removeBtn: {
     padding: 4,
     borderRadius: 8,
-    backgroundColor: '#FDF1F3',
   },
   destinationName: {
     fontSize: 17,
     fontWeight: '700',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   locationRow: {
@@ -244,7 +303,6 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 12,
-    color: colors.textMuted,
     fontWeight: '500',
   },
   footerRow: {
@@ -261,14 +319,12 @@ const styles = StyleSheet.create({
   ratingNumber: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.textHeading,
   },
   seasonBox: {
     maxWidth: '65%',
   },
   seasonText: {
     fontSize: 10,
-    color: colors.textBody,
     fontWeight: '500',
   },
   emptyContainer: {
@@ -281,23 +337,19 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: '#FDEEF1',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 18,
     borderWidth: 1,
-    borderColor: '#F0D5DC',
   },
   emptyTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: colors.textHeading,
     marginBottom: 8,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   emptyDescription: {
     fontSize: 13,
-    color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 24,
@@ -305,12 +357,11 @@ const styles = StyleSheet.create({
   exploreBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.primary,
     paddingHorizontal: 24,
     paddingVertical: 14,
     borderRadius: 24,
     gap: 8,
-    shadowColor: colors.primaryDark,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,

@@ -4,8 +4,8 @@ export const categories = [
   'Mountains',
   'Heritage',
   'Adventure',
+  'Religious & Spiritual',
   'Wildlife',
-  'Spiritual',
 ];
 
 export const destinationsData = [
@@ -21,6 +21,11 @@ export const destinationsData = [
     rating: 4.8,
     reviews: '3.4k',
     bestTimeToVisit: 'November to February',
+    budget: 'Moderate',
+    approxBudget: '₹15,000 – ₹30,000',
+    duration: 'Week (4-7 Days)',
+    ageGroup: ['Young', 'Adults', 'Families'],
+    pace: 'Moderate',
     shortDescription: 'Goa is known for its beautiful beaches, vibrant nightlife, and delicious coastal cuisine.',
     fullDescription: 'Nestled along the Konkan coast, Goa blends bohemian beach life with Portuguese heritage. From golden sands lined with coconut palms to centuries-old cathedrals and lively flea markets, Goa offers an unforgettable tropical escape.',
     featured: true,
@@ -50,16 +55,65 @@ export const destinationsData = [
     ]
   },
   {
+    id: '17',
+    name: 'Pondicherry',
+    subtitle: 'French Riviera of the East',
+    location: 'Puducherry, India',
+    state: 'Puducherry',
+    category: 'Beaches',
+    image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.8,
+    reviews: '2.9k',
+    bestTimeToVisit: 'October to March',
+    budget: 'Budget',
+    approxBudget: '₹8,000 – ₹16,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Young', 'Adults', 'Seniors', 'Families'],
+    pace: 'Relaxed',
+    shortDescription: 'Quaint coastal town with French colonial boulevards, rocky seaside promenade, and serene spiritual ashrams.',
+    fullDescription: 'Pondicherry exudes European coastal charm. Tree-lined streets with mustard-colored colonial villas, bohemian bakeries, peaceful rocky promenade facing the Bay of Bengal, and the world-renowned international township of Auroville.',
+    featured: true,
+    tagline: 'Coastal Bohemian Serenity',
+    attractions: [
+      {
+        id: 'a49',
+        name: 'Promenade Beach',
+        tag: 'Iconic Seafront Boulevard',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+        description: 'Pedestrian seafront stretch lined with French heritage statues, sea breeze, and cafes.'
+      },
+      {
+        id: 'a50',
+        name: 'Paradise Beach',
+        tag: 'Golden Ferry Beach',
+        image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80',
+        description: 'Isolated virgin island beach accessible via picturesque Chunnambar backwater boat rides.'
+      },
+      {
+        id: 'a51',
+        name: 'Auroville & French Quarter',
+        tag: 'Matrimandir & Heritage',
+        image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
+        description: 'Experimental universal township featuring the golden metallic dome of Matrimandir.'
+      }
+    ]
+  },
+  {
     id: '5',
     name: 'Andaman & Nicobar',
     subtitle: 'Turquoise Waters & Coral Reefs',
-    location: 'Andaman & Nicobar Islands',
+    location: 'Bay of Bengal, India',
     state: 'Andaman & Nicobar',
     category: 'Beaches',
     image: 'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1200&q=80',
     rating: 4.9,
     reviews: '1.9k',
     bestTimeToVisit: 'October to May',
+    budget: 'Luxury',
+    approxBudget: '₹40,000 – ₹70,000',
+    duration: 'Week (4-7 Days)',
+    ageGroup: ['Young', 'Adults', 'Families'],
+    pace: 'Moderate',
     shortDescription: 'Tropical archipelago boasting untouched coral reefs, white sand beaches, and deep marine biodiversity.',
     fullDescription: 'An idyllic island paradise in the Bay of Bengal. Known for Radhanagar Beach (frequently ranked among Asia’s finest), world-class scuba diving, bio-luminescence, mangrove creeks, and historic Cellular Jail.',
     featured: false,
@@ -99,6 +153,11 @@ export const destinationsData = [
     rating: 4.7,
     reviews: '1.6k',
     bestTimeToVisit: 'October to March',
+    budget: 'Budget',
+    approxBudget: '₹7,000 – ₹14,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Young', 'Adults'],
+    pace: 'Relaxed',
     shortDescription: 'Laid-back coastal temple town famous for Om Beach, pristine cliffside trekking, and tranquil vibes.',
     fullDescription: 'Gokarna offers a peaceful alternative to commercial coastlines. Its coastline forms the auspicious shape of the sacred Om symbol, complemented by rustic beach huts, cliffside cafes, and untouched golden shores.',
     featured: false,
@@ -127,45 +186,6 @@ export const destinationsData = [
       }
     ]
   },
-  {
-    id: '10',
-    name: 'Varkala',
-    subtitle: 'Red Laterite Cliffs over Arabian Sea',
-    location: 'Kerala, India',
-    state: 'Kerala',
-    category: 'Beaches',
-    image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.8,
-    reviews: '2.2k',
-    bestTimeToVisit: 'November to March',
-    shortDescription: 'Dramatic coastal haven where dramatic red laterite cliffs plunge directly into the shimmering Arabian Sea.',
-    fullDescription: 'Varkala is Kerala’s cliffside gem. A pedestrian-only cliff-edge pathway boasts panoramic sunset views, organic bakeries, Ayurvedic wellness sanctuaries, and peaceful natural mineral water springs.',
-    featured: true,
-    tagline: 'Cliffside Coastal Sanctuary',
-    attractions: [
-      {
-        id: 'a28',
-        name: 'Varkala Cliff & Papanasam Beach',
-        tag: 'Natural Mineral Springs',
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-        description: 'Holy beach where waters are believed to wash away sins, overlooked by red cliffs.'
-      },
-      {
-        id: 'a29',
-        name: 'Janardhana Swami Temple',
-        tag: '2000-Year Ancient Shrine',
-        image: 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=600&q=80',
-        description: 'Venerated seaside Vishnu temple renowned for historic Dutch bell and brass lamps.'
-      },
-      {
-        id: 'a30',
-        name: 'Kappil Lake & Beach',
-        tag: 'Backwater Confluence',
-        image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80',
-        description: 'Stunning estuary where tranquil Kerala backwaters meet the crashing sea waves.'
-      }
-    ]
-  },
 
   // --- MOUNTAINS ---
   {
@@ -179,6 +199,11 @@ export const destinationsData = [
     rating: 4.7,
     reviews: '2.8k',
     bestTimeToVisit: 'March to June & Dec to Feb',
+    budget: 'Moderate',
+    approxBudget: '₹14,000 – ₹28,000',
+    duration: 'Week (4-7 Days)',
+    ageGroup: ['Young', 'Adults', 'Families'],
+    pace: 'Active',
     shortDescription: 'High altitude Himalayan resort town offering scenic mountain views, snowy valleys, and alpine charm.',
     fullDescription: 'Set beside the gushing Beas River, Manali is a gateway to the high Himalayas. Famous for snow-dusted pine valleys, wooden cottages, tranquil Buddhist monasteries, and adrenaline sports in the Solang Valley.',
     featured: true,
@@ -218,6 +243,11 @@ export const destinationsData = [
     rating: 4.8,
     reviews: '2.1k',
     bestTimeToVisit: 'September to March',
+    budget: 'Moderate',
+    approxBudget: '₹12,000 – ₹25,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Adults', 'Seniors', 'Families'],
+    pace: 'Relaxed',
     shortDescription: 'Serene hill station blanketed in undulating tea plantations, misty peaks, and cool climate.',
     fullDescription: 'Perched in the Western Ghats of Kerala, Munnar is a haven of peace and greenery. Lush velvet hills, colonial bungalows, aromatic spice plantations, and the endangered Nilgiri Tahr mountain goats await travelers.',
     featured: false,
@@ -257,6 +287,11 @@ export const destinationsData = [
     rating: 4.8,
     reviews: '2.5k',
     bestTimeToVisit: 'October to December & April to June',
+    budget: 'Budget',
+    approxBudget: '₹10,000 – ₹20,000',
+    duration: 'Week (4-7 Days)',
+    ageGroup: ['Young', 'Adults', 'Seniors', 'Families'],
+    pace: 'Moderate',
     shortDescription: 'World-famous tea gardens, vintage Himalayan Toy Train, and glorious views of Mount Kanchenjunga.',
     fullDescription: 'Nestled in the Eastern Himalayas, Darjeeling is world-renowned for its aromatic champagne tea, British colonial estates, colorful Tibetan monasteries, and the UNESCO World Heritage mountain railway.',
     featured: false,
@@ -298,6 +333,11 @@ export const destinationsData = [
     rating: 4.9,
     reviews: '4.1k',
     bestTimeToVisit: 'October to March',
+    budget: 'Moderate',
+    approxBudget: '₹12,000 – ₹26,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Adults', 'Seniors', 'Families', 'Young'],
+    pace: 'Moderate',
     shortDescription: 'Historic royal capital celebrated for pink sandstone palaces, imposing hilltop forts, and Rajput splendor.',
     fullDescription: 'Founded in 1727, Jaipur is part of the Golden Triangle. It enchants travelers with the honeycomb façade of Hawa Mahal, the hilltop fortress of Amber, grand courtyards, colorful textiles, and authentic Rajasthani hospitality.',
     featured: true,
@@ -337,6 +377,11 @@ export const destinationsData = [
     rating: 4.9,
     reviews: '3.1k',
     bestTimeToVisit: 'October to February',
+    budget: 'Budget',
+    approxBudget: '₹8,000 – ₹15,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Young', 'Adults'],
+    pace: 'Active',
     shortDescription: 'Ancient capital of the Vijayanagara Empire dotted with monumental carved stone temples and boulders.',
     fullDescription: 'A UNESCO World Heritage open-air museum where history whispers through thousands of monolithic granite ruins. The surreal landscape features coracle boat rides on the Tungabhadra river, the musical pillars of Vittala, and glorious sunsets.',
     featured: false,
@@ -365,42 +410,137 @@ export const destinationsData = [
       }
     ]
   },
+
+  // --- RELIGIOUS & SPIRITUAL ---
   {
-    id: '12',
-    name: 'Agra',
-    subtitle: 'Mughal Architectural Marvels',
+    id: '15',
+    name: 'Varanasi',
+    subtitle: 'The Spiritual Capital of Light',
     location: 'Uttar Pradesh, India',
     state: 'Uttar Pradesh',
-    category: 'Heritage',
-    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
+    category: 'Religious & Spiritual',
+    image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80',
     rating: 4.9,
-    reviews: '5.2k',
+    reviews: '4.8k',
     bestTimeToVisit: 'October to March',
-    shortDescription: 'Home to the immortal Taj Mahal, Agra Fort, and masterpieces of Mughal dynasty craftsmanship.',
-    fullDescription: 'Resting on the banks of the Yamuna River, Agra is synonymous with the Taj Mahal—one of the Seven Wonders of the World. The ivory-white marble monument, red sandstone citadel of Agra Fort, and ghost city of Fatehpur Sikri narrate an imperial saga.',
+    budget: 'Budget',
+    approxBudget: '₹7,000 – ₹15,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Seniors', 'Adults', 'Families', 'Young'],
+    pace: 'Relaxed',
+    shortDescription: 'One of the world’s oldest living cities, celebrated for sacred Ganga Aarti, ghats, and Kashi Vishwanath.',
+    fullDescription: 'Varanasi (Kashi) is the soulful spiritual heart of India. Sitting on the crescent curve of the Holy Ganges, the ancient city illuminates with evening oil lamps, chanting priests during Maha Aarti, sunrise boat rituals, and sacred temples.',
     featured: true,
-    tagline: 'Monument of Eternal Love',
+    tagline: 'City of Eternal Moksha',
     attractions: [
       {
-        id: 'a34',
-        name: 'Taj Mahal',
-        tag: 'World Wonder',
-        image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80',
-        description: 'Peerless 17th-century white marble mausoleum commissioned by Emperor Shah Jahan.'
+        id: 'a43',
+        name: 'Dashashwamedh Ghat Aarti',
+        tag: 'Mesmerizing Fire Ritual',
+        image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=80',
+        description: 'Grand evening prayer ritual with synchronized brass lamps, incense, and conch shells.'
       },
       {
-        id: 'a35',
-        name: 'Agra Fort',
-        tag: 'Red Sandstone Citadel',
+        id: 'a44',
+        name: 'Kashi Vishwanath Temple',
+        tag: 'Golden Temple of Shiva',
         image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
-        description: 'Massive Mughal fortress housing Jahangiri Mahal, Diwan-i-Khas, and imperial palaces.'
+        description: 'One of the 12 sacred Jyotirlingas featuring magnificent 800-kg gold leaf spires.'
       },
       {
-        id: 'a36',
-        name: 'Mehtab Bagh',
-        tag: 'Moonlight River Gardens',
+        id: 'a45',
+        name: 'Assi Ghat Sunrise Boat Cruise',
+        tag: 'Sacred Dawn Rowing',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+        description: 'Early morning traditional wooden boat journey past 84 stone ghats in morning mist.'
+      }
+    ]
+  },
+  {
+    id: '18',
+    name: 'Tirupati',
+    subtitle: 'Sacred Abode of Lord Venkateswara',
+    location: 'Andhra Pradesh, India',
+    state: 'Andhra Pradesh',
+    category: 'Religious & Spiritual',
+    image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '5.6k',
+    bestTimeToVisit: 'September to March',
+    budget: 'Budget',
+    approxBudget: '₹6,000 – ₹14,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Seniors', 'Families', 'Adults'],
+    pace: 'Relaxed',
+    shortDescription: 'The world-famous sacred Tirumala hill temple dedicated to Lord Balaji, surrounded by holy waterfalls.',
+    fullDescription: 'Perched high in the Seshachalam Hills, Tirupati is one of the most visited pilgrimage destinations on earth. Millions travel to seek blessings at the golden Ananda Nilayam tower of Sri Venkateswara Temple, taste authentic Tirupati Laddu Prasadam, and hike the sacred steps of Alipiri.',
+    featured: true,
+    tagline: 'Divine Hills of Kaliyuga',
+    attractions: [
+      {
+        id: 'a52',
+        name: 'Sri Venkateswara Temple',
+        tag: 'Golden Ananda Nilayam',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+        description: 'Ancient Dravidian masterpiece atop the 7 sacred peaks of Tirumala.'
+      },
+      {
+        id: 'a53',
+        name: 'Kapila Theertham Falls',
+        tag: 'Sacred Shiva Waterfalls',
+        image: 'https://images.unsplash.com/photo-1586053226626-febc8817769e?auto=format&fit=crop&w=600&q=80',
+        description: 'Holy waterfall cascade flowing directly into a sacred temple tank at foot of hills.'
+      },
+      {
+        id: 'a54',
+        name: 'Sri Padmavathi Ammavari Temple',
+        tag: 'Tiruchanur Goddess Shrine',
+        image: 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=600&q=80',
+        description: 'Serene temple dedicated to Goddess Padmavathi, consort of Lord Venkateswara.'
+      }
+    ]
+  },
+  {
+    id: '16',
+    name: 'Amritsar',
+    subtitle: 'Golden Temple & Living Heritage',
+    location: 'Punjab, India',
+    state: 'Punjab',
+    category: 'Religious & Spiritual',
+    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '4.4k',
+    bestTimeToVisit: 'October to March',
+    budget: 'Budget',
+    approxBudget: '₹8,000 – ₹16,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Seniors', 'Adults', 'Families', 'Young'],
+    pace: 'Relaxed',
+    shortDescription: 'Home to the magnificent gilded Harmandir Sahib (Golden Temple), holy nectar pool, and warm Punjabi culture.',
+    fullDescription: 'Amritsar is the spiritual and cultural center of the Sikh community. The Golden Temple gleams in the center of the Amrit Sarovar lake, serving free meals to over 100,000 visitors every day through the world’s largest community kitchen (Langar).',
+    featured: false,
+    tagline: 'Gilded Sanctuary of Peace',
+    attractions: [
+      {
+        id: 'a46',
+        name: 'Sri Harmandir Sahib',
+        tag: 'The Golden Temple',
+        image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=600&q=80',
+        description: 'Pure gold-plated spiritual sanctum surrounded by the sacred pool of nectar.'
+      },
+      {
+        id: 'a47',
+        name: 'Wagah Border Ceremony',
+        tag: 'Electrifying Beating Retreat',
         image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
-        description: 'Charbagh garden complex on the opposite riverbank with reflections of the Taj.'
+        description: 'High-energy military parade and flag-lowering ceremony at the Indo-Pak border.'
+      },
+      {
+        id: 'a48',
+        name: 'Jallianwala Bagh',
+        tag: 'Historic Memorial Park',
+        image: 'https://images.unsplash.com/photo-1590076215667-873d31295245?auto=format&fit=crop&w=600&q=80',
+        description: 'Solemn national memorial preserving the historic Martyrs’ Well and bullet marks.'
       }
     ]
   },
@@ -417,6 +557,11 @@ export const destinationsData = [
     rating: 4.8,
     reviews: '2.5k',
     bestTimeToVisit: 'September to November & March to May',
+    budget: 'Budget',
+    approxBudget: '₹7,000 – ₹15,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Young', 'Adults'],
+    pace: 'Active',
     shortDescription: 'World capital of Yoga and premier adventure destination on the banks of the turquoise holy Ganges.',
     fullDescription: 'Tucked at the Himalayan foothills where the emerald Ganges flows through steep river valleys. Rishikesh is legendary for adrenaline-filled river rafting, suspension bridges, cliff jumping, peaceful ashrams, and magical evening Ganga Aarti.',
     featured: true,
@@ -456,6 +601,11 @@ export const destinationsData = [
     rating: 4.9,
     reviews: '3.7k',
     bestTimeToVisit: 'May to September',
+    budget: 'Luxury',
+    approxBudget: '₹35,000 – ₹60,000',
+    duration: 'Extended (8+ Days)',
+    ageGroup: ['Young', 'Adults'],
+    pace: 'Active',
     shortDescription: 'High-altitude desert encircled by jagged peaks, crystal blue alpine lakes, and dramatic passes.',
     fullDescription: 'An otherworldly high-altitude adventure destination offering the highest motorable roads on earth, crystal clear Pangong Tso lake reflecting changing azure hues, white sand dunes of Nubra, and centuries-old Tibetan Buddhist gompas.',
     featured: true,
@@ -484,45 +634,6 @@ export const destinationsData = [
       }
     ]
   },
-  {
-    id: '13',
-    name: 'Spiti Valley',
-    subtitle: 'The Middle Land of Cold Desert',
-    location: 'Himachal Pradesh, India',
-    state: 'Himachal Pradesh',
-    category: 'Adventure',
-    image: 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.9,
-    reviews: '1.8k',
-    bestTimeToVisit: 'June to September',
-    shortDescription: 'Rugged terrain, high-altitude monasteries, star-studded milky way nights, and raw mountain trails.',
-    fullDescription: 'Spiti, meaning "The Middle Land" between India and Tibet, is an intrepid traveler’s paradise. Dramatic gorges, thousand-year-old Key Monastery perched on a hill pyramid, fossil villages, and world’s highest post office at Hikkim.',
-    featured: false,
-    tagline: 'Untamed Himalayan Wilderness',
-    attractions: [
-      {
-        id: 'a37',
-        name: 'Key Monastery',
-        tag: '11th Century Tibetan Gompa',
-        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80',
-        description: 'Iconic fort-like monastery perched atop a rocky hill with ancient murals and thangkas.'
-      },
-      {
-        id: 'a38',
-        name: 'Chandratal Lake',
-        tag: 'Moon Crescent Alpine Lake',
-        image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=600&q=80',
-        description: 'Pristine turquoise glacial lake situated at 14,100 ft amidst the high peaks.'
-      },
-      {
-        id: 'a39',
-        name: 'Hikkim Village Post Office',
-        tag: 'World’s Highest Post Office',
-        image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80',
-        description: 'Send postcards stamped from 14,567 ft to anywhere in the world.'
-      }
-    ]
-  },
 
   // --- WILDLIFE ---
   {
@@ -536,6 +647,11 @@ export const destinationsData = [
     rating: 4.8,
     reviews: '3.1k',
     bestTimeToVisit: 'November to June',
+    budget: 'Moderate',
+    approxBudget: '₹14,000 – ₹28,000',
+    duration: 'Weekend (2-3 Days)',
+    ageGroup: ['Young', 'Adults', 'Families', 'Seniors'],
+    pace: 'Moderate',
     shortDescription: 'India’s oldest national park renowned for thrilling tiger safaris, sal forests, and elephant herds.',
     fullDescription: 'Established in 1936, Jim Corbett is the birthplace of Project Tiger. Spanning riverside grasslands, dense sal forests, and foothills of the Himalayas, visitors encounter Royal Bengal tigers, wild Asian elephants, and over 600 species of birds.',
     featured: true,
@@ -557,90 +673,10 @@ export const destinationsData = [
       },
       {
         id: 'a42',
-        name: 'Ramganga River Rafting & Watchtowers',
+        name: 'Ramganga River Watchtowers',
         tag: 'Gharial & Bird Watching',
         image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80',
         description: 'Prime crocodile, gharial, and migratory water bird observation along the river.'
-      }
-    ]
-  },
-
-  // --- SPIRITUAL ---
-  {
-    id: '15',
-    name: 'Varanasi',
-    subtitle: 'The Spiritual Capital of Light',
-    location: 'Uttar Pradesh, India',
-    state: 'Uttar Pradesh',
-    category: 'Spiritual',
-    image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.9,
-    reviews: '4.8k',
-    bestTimeToVisit: 'October to March',
-    shortDescription: 'One of the world’s oldest living cities, celebrated for sacred Ganga Aarti, ghats, and Kashi Vishwanath.',
-    fullDescription: 'Varanasi (Kashi) is the soulful spiritual heart of India. Sitting on the crescent curve of the Holy Ganges, the ancient city illuminates with evening oil lamps, chanting priests during Maha Aarti, sunrise boat rituals, and sacred temples.',
-    featured: true,
-    tagline: 'City of Eternal Moksha',
-    attractions: [
-      {
-        id: 'a43',
-        name: 'Dashashwamedh Ghat Aarti',
-        tag: 'Mesmerizing Fire Ritual',
-        image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=80',
-        description: 'Grand evening prayer ritual with synchronized brass lamps, incense, and conch shells.'
-      },
-      {
-        id: 'a44',
-        name: 'Kashi Vishwanath Temple',
-        tag: 'Golden Temple of Shiva',
-        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
-        description: 'One of the 12 sacred Jyotirlingas featuring magnificent 800-kg gold leaf spires.'
-      },
-      {
-        id: 'a45',
-        name: 'Assi Ghat Sunrise Boat Cruise',
-        tag: 'Sacred Dawn Rowing',
-        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-        description: 'Early morning traditional wooden boat journey past 84 stone ghats in morning mist.'
-      }
-    ]
-  },
-  {
-    id: '16',
-    name: 'Amritsar',
-    subtitle: 'Golden Temple & Living Heritage',
-    location: 'Punjab, India',
-    state: 'Punjab',
-    category: 'Spiritual',
-    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.9,
-    reviews: '4.4k',
-    bestTimeToVisit: 'October to March',
-    shortDescription: 'Home to the magnificent gilded Harmandir Sahib (Golden Temple), holy nectar pool, and warm Punjabi culture.',
-    fullDescription: 'Amritsar is the spiritual and cultural center of the Sikh community. The Golden Temple gleams in the center of the Amrit Sarovar lake, serving free meals to over 100,000 visitors every day through the world’s largest community kitchen (Langar).',
-    featured: false,
-    tagline: 'Gilded Sanctuary of Peace',
-    attractions: [
-      {
-        id: 'a46',
-        name: 'Sri Harmandir Sahib',
-        tag: 'The Golden Temple',
-        image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=600&q=80',
-        description: 'Pure gold-plated spiritual sanctum surrounded by the sacred pool of nectar.'
-      },
-      {
-        id: 'a47',
-        name: 'Wagah Border Ceremony',
-        tag: 'Electrifying Beating Retreat',
-        image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
-        description: 'High-energy military parade and flag-lowering ceremony at the Indo-Pak border.'
-      },
-      {
-        id: 'a48',
-        name: 'Jallianwala Bagh',
-        tag: 'Historic Memorial Park',
-        image: 'https://images.unsplash.com/photo-1590076215667-873d31295245?auto=format&fit=crop&w=600&q=80',
-        description: 'Solemn national memorial preserving the historic Martyrs’ Well and bullet marks.'
       }
     ]
   }

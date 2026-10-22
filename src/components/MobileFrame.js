@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../constants/colors';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 export const MobileFrame = ({ children }) => {
   const { width } = useWindowDimensions();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const { notificationMessage } = useAuth();
+  const { theme, isDarkMode } = useTheme();
 
   // Real-time live clock ticking every second
   const [currentTime, setCurrentTime] = useState(() => {
@@ -47,10 +48,14 @@ export const MobileFrame = ({ children }) => {
 
   if (!isDesktopWeb) {
     return (
-      <View style={styles.nativeContainer}>
+      <View
+        style={[styles.nativeContainer, { backgroundColor: theme.background }]}
+      >
         {/* In-app Toast Banner */}
         {notificationMessage && (
-          <View style={styles.toastBanner}>
+          <View
+            style={[styles.toastBanner, { backgroundColor: theme.primaryDark }]}
+          >
             <Ionicons name="notifications" size={16} color="#FFFFFF" />
             <Text style={styles.toastText}>{notificationMessage}</Text>
           </View>
@@ -71,28 +76,47 @@ export const MobileFrame = ({ children }) => {
   }
 
   return (
-    <View style={styles.desktopOuterContainer}>
-      {/* Top Banner for Traveler App */}
+    <View
+      style={[
+        styles.desktopOuterContainer,
+        {
+          backgroundColor: isDarkMode ? '#110713' : '#F3E5E8',
+        },
+      ]}
+    >
+      {/* Top Banner */}
       <View style={styles.desktopHeader}>
         <View style={styles.desktopHeaderLeft}>
-          <Text style={styles.appNameBadge}>WANDERLUST INDIA</Text>
-          <Text style={styles.appTitle}>Travel Explorer Mobile App</Text>
+          <Text style={[styles.appNameBadge, { color: theme.primary }]}>
+            WANDERLUST INDIA
+          </Text>
+          <Text style={[styles.appTitle, { color: theme.textHeading }]}>
+            Travel Explorer App
+          </Text>
         </View>
 
         <View style={styles.desktopHeaderRight}>
           <TouchableOpacity
-            style={styles.fullscreenToggle}
+            style={[
+              styles.fullscreenToggle,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
             onPress={() => setIsFullscreen(true)}
           >
-            <Ionicons name="expand-outline" size={16} color={colors.primary} />
-            <Text style={styles.toggleText}>Full Screen</Text>
+            <Ionicons name="expand-outline" size={16} color={theme.primary} />
+            <Text style={[styles.toggleText, { color: theme.primary }]}>
+              Full Screen
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Realistic Mobile Device Mockup */}
       <View style={styles.phoneChassis}>
-        {/* Phone Speaker & Dynamic Island */}
+        {/* Phone Dynamic Island */}
         <View style={styles.dynamicIsland}>
           <View style={styles.cameraLens} />
           <View style={styles.speakerGrill} />
@@ -100,17 +124,24 @@ export const MobileFrame = ({ children }) => {
 
         {/* Real-time Live Status Bar */}
         <View style={styles.mockStatusBar}>
-          <Text style={styles.mockTime}>{currentTime}</Text>
+          <Text style={[styles.mockTime, { color: theme.textHeading }]}>
+            {currentTime}
+          </Text>
           <View style={styles.mockStatusIcons}>
-            <Ionicons name="cellular" size={12} color={colors.textHeading} />
-            <Ionicons name="wifi" size={12} color={colors.textHeading} />
-            <Ionicons name="battery-full" size={14} color={colors.textHeading} />
+            <Ionicons name="cellular" size={12} color={theme.textHeading} />
+            <Ionicons name="wifi" size={12} color={theme.textHeading} />
+            <Ionicons name="battery-full" size={14} color={theme.textHeading} />
           </View>
         </View>
 
-        {/* Toast Notification Banner inside Mobile Screen */}
+        {/* Toast Notification Banner */}
         {notificationMessage && (
-          <View style={styles.phoneToastBanner}>
+          <View
+            style={[
+              styles.phoneToastBanner,
+              { backgroundColor: theme.primaryDark },
+            ]}
+          >
             <Ionicons name="notifications" size={14} color="#FFFFFF" />
             <Text style={styles.phoneToastText} numberOfLines={2}>
               {notificationMessage}
@@ -119,11 +150,30 @@ export const MobileFrame = ({ children }) => {
         )}
 
         {/* Screen Content Container */}
-        <View style={styles.phoneScreen}>{children}</View>
+        <View
+          style={[
+            styles.phoneScreen,
+            { backgroundColor: theme.background },
+          ]}
+        >
+          {children}
+        </View>
 
         {/* Bottom Home Indicator Bar */}
-        <View style={styles.homeIndicatorContainer}>
-          <View style={styles.homeIndicator} />
+        <View
+          style={[
+            styles.homeIndicatorContainer,
+            { backgroundColor: theme.background },
+          ]}
+        >
+          <View
+            style={[
+              styles.homeIndicator,
+              {
+                backgroundColor: isDarkMode ? '#FFFFFF' : '#4E364F',
+              },
+            ]}
+          />
         </View>
       </View>
     </View>
@@ -134,13 +184,11 @@ const styles = StyleSheet.create({
   nativeContainer: {
     flex: 1,
     height: '100%',
-    backgroundColor: colors.background,
   },
   desktopOuterContainer: {
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#F3E5E8',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
@@ -159,14 +207,12 @@ const styles = StyleSheet.create({
   appNameBadge: {
     fontSize: 11,
     fontWeight: '800',
-    color: colors.primary,
     textTransform: 'uppercase',
     letterSpacing: 1.2,
   },
   appTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: colors.textHeading,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   desktopHeaderRight: {
@@ -175,11 +221,11 @@ const styles = StyleSheet.create({
   fullscreenToggle: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     gap: 6,
+    borderWidth: 1,
     shadowColor: '#000',
     shadowOpacity: 0.05,
     shadowRadius: 4,
@@ -187,14 +233,13 @@ const styles = StyleSheet.create({
   toggleText: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.primary,
   },
   mobileExitFullscreenBtn: {
     position: 'absolute',
     top: 40,
     right: 16,
     zIndex: 9999,
-    backgroundColor: 'rgba(54, 33, 55, 0.85)',
+    backgroundColor: 'rgba(34, 18, 35, 0.85)',
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
@@ -212,7 +257,6 @@ const styles = StyleSheet.create({
     top: 50,
     left: 20,
     right: 20,
-    backgroundColor: colors.primaryDark,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 16,
@@ -233,12 +277,12 @@ const styles = StyleSheet.create({
   phoneChassis: {
     width: 414,
     height: 852,
-    backgroundColor: '#261C26',
+    backgroundColor: '#1E1220',
     borderRadius: 50,
     padding: 11,
-    shadowColor: '#2B1225',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 18 },
-    shadowOpacity: 0.28,
+    shadowOpacity: 0.35,
     shadowRadius: 36,
     elevation: 20,
     position: 'relative',
@@ -250,7 +294,7 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -48 }],
     width: 96,
     height: 24,
-    backgroundColor: '#150E16',
+    backgroundColor: '#0D050F',
     borderRadius: 16,
     zIndex: 999,
     flexDirection: 'row',
@@ -262,13 +306,13 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#1E1929',
+    backgroundColor: '#1C111E',
   },
   speakerGrill: {
     width: 32,
     height: 4,
     borderRadius: 2,
-    backgroundColor: '#2D2838',
+    backgroundColor: '#2D1F2F',
   },
   mockStatusBar: {
     position: 'absolute',
@@ -283,7 +327,6 @@ const styles = StyleSheet.create({
   mockTime: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.textHeading,
     letterSpacing: 0.4,
   },
   mockStatusIcons: {
@@ -296,7 +339,6 @@ const styles = StyleSheet.create({
     top: 50,
     left: 20,
     right: 20,
-    backgroundColor: colors.primaryDark,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 14,
@@ -305,7 +347,7 @@ const styles = StyleSheet.create({
     gap: 6,
     zIndex: 99999,
     shadowColor: '#000',
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.25,
     shadowRadius: 6,
   },
   phoneToastText: {
@@ -316,7 +358,6 @@ const styles = StyleSheet.create({
   },
   phoneScreen: {
     flex: 1,
-    backgroundColor: colors.background,
     borderRadius: 40,
     overflow: 'hidden',
     paddingTop: 36,
@@ -325,15 +366,13 @@ const styles = StyleSheet.create({
     height: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.background,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
   },
   homeIndicator: {
     width: 134,
     height: 4,
-    backgroundColor: colors.textMuted,
     borderRadius: 2,
-    opacity: 0.6,
+    opacity: 0.5,
   },
 });
