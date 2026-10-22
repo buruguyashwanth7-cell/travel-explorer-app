@@ -144,7 +144,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 14,
-    backdropFilter: 'blur(8px)',
   },
   tagBadgeText: {
     color: '#FFFFFF',
