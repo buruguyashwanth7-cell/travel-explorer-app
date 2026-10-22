@@ -17,6 +17,9 @@ import { useTrips } from '../context/TripsContext';
 import { useAuth } from '../context/AuthContext';
 import { AttractionCard } from '../components/AttractionCard';
 import { fetchLiveWeather } from '../services/weatherService';
+import { getDestinationTheme } from '../constants/destinationThemes';
+import { GlassDestinationView } from '../components/GlassDestinationView';
+import { ClayDestinationView } from '../components/ClayDestinationView';
 
 export const DetailsScreen = ({ route, navigation }) => {
   const { destination } = route.params;
@@ -26,6 +29,10 @@ export const DetailsScreen = ({ route, navigation }) => {
   const { setNotificationMessage } = useAuth();
 
   const favorited = isInWishlist(destination.id);
+
+  // Place-specific dynamic theme (Concept Beijing & Cairo interfaces)
+  const placeTheme = getDestinationTheme(destination);
+  const [viewMode, setViewMode] = useState('glass'); // 'glass' | 'clay' | 'classic'
 
   // Live Weather State (Extension Challenge #2)
   const [weatherData, setWeatherData] = useState(null);
@@ -79,6 +86,45 @@ export const DetailsScreen = ({ route, navigation }) => {
     );
   };
 
+  // 1. Futuristic Glass HUD Interface (Concept Beijing Style - Image 1)
+  if (viewMode === 'glass') {
+    return (
+      <GlassDestinationView
+        destination={destination}
+        placeTheme={placeTheme}
+        weatherData={weatherData}
+        isWeatherLoading={isWeatherLoading}
+        favorited={favorited}
+        toggleWishlist={toggleWishlist}
+        handleAddToJourneys={handleAddToJourneys}
+        handleOpenGoogleMaps={handleOpenGoogleMaps}
+        navigation={navigation}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
+    );
+  }
+
+  // 2. Claymorphic Experience Studio (Cairo Style - Image 2)
+  if (viewMode === 'clay') {
+    return (
+      <ClayDestinationView
+        destination={destination}
+        placeTheme={placeTheme}
+        weatherData={weatherData}
+        isWeatherLoading={isWeatherLoading}
+        favorited={favorited}
+        toggleWishlist={toggleWishlist}
+        handleAddToJourneys={handleAddToJourneys}
+        handleOpenGoogleMaps={handleOpenGoogleMaps}
+        navigation={navigation}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
+    );
+  }
+
+  // 3. Classic Detailed Overview (with top switcher)
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
@@ -93,7 +139,7 @@ export const DetailsScreen = ({ route, navigation }) => {
             resizeMode="cover"
           />
 
-          {/* Floating Top Controls */}
+          {/* Floating Top Controls with Mode Switcher */}
           <View style={styles.floatingTopBar}>
             <TouchableOpacity
               activeOpacity={0.85}
@@ -102,6 +148,77 @@ export const DetailsScreen = ({ route, navigation }) => {
             >
               <Ionicons name="arrow-back" size={20} color="#2F1B2F" />
             </TouchableOpacity>
+
+            <View style={styles.classicSwitcherPill}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={[
+                  styles.classicTab,
+                  viewMode === 'glass' && { backgroundColor: placeTheme.secondaryAccent },
+                ]}
+                onPress={() => setViewMode('glass')}
+              >
+                <Ionicons
+                  name="sparkles"
+                  size={11}
+                  color={viewMode === 'glass' ? '#FFFFFF' : '#475569'}
+                />
+                <Text
+                  style={[
+                    styles.classicTabText,
+                    viewMode === 'glass' && styles.classicTabTextActive,
+                  ]}
+                >
+                  Glass HUD
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={[
+                  styles.classicTab,
+                  viewMode === 'clay' && { backgroundColor: placeTheme.clayAccent },
+                ]}
+                onPress={() => setViewMode('clay')}
+              >
+                <Ionicons
+                  name="cube"
+                  size={11}
+                  color={viewMode === 'clay' ? '#FFFFFF' : '#475569'}
+                />
+                <Text
+                  style={[
+                    styles.classicTabText,
+                    viewMode === 'clay' && styles.classicTabTextActive,
+                  ]}
+                >
+                  Clay
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={[
+                  styles.classicTab,
+                  viewMode === 'classic' && { backgroundColor: theme.primary },
+                ]}
+                onPress={() => setViewMode('classic')}
+              >
+                <Ionicons
+                  name="reader-outline"
+                  size={11}
+                  color={viewMode === 'classic' ? '#FFFFFF' : '#475569'}
+                />
+                <Text
+                  style={[
+                    styles.classicTabText,
+                    viewMode === 'classic' && styles.classicTabTextActive,
+                  ]}
+                >
+                  Classic
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             <TouchableOpacity
               activeOpacity={0.85}
@@ -535,6 +652,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 6,
     elevation: 4,
+  },
+  classicSwitcherPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 3,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.94)',
+    gap: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  classicTab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+    borderRadius: 16,
+    gap: 4,
+  },
+  classicTabText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  classicTabTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '800',
   },
   categoryBadge: {
     position: 'absolute',
