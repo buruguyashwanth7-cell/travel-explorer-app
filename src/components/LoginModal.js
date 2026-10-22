@@ -22,6 +22,8 @@ export const LoginModal = () => {
     sendOtp,
     verifyOtp,
     generatedOtp,
+    isEmailRegistered,
+    isLoggedIn,
   } = useAuth();
   const { theme } = useTheme();
 
@@ -35,6 +37,17 @@ export const LoginModal = () => {
     if (!email || !email.includes('@')) {
       setErrorMessage('Please enter a valid email address.');
       return;
+    }
+    // If in Login mode, verify that an account already exists!
+    if (authMode === 'login') {
+      const exists = isEmailRegistered(email);
+      if (!exists) {
+        setErrorMessage(
+          'No existing account found with this email. Please create an account first!'
+        );
+        setAuthMode('signup');
+        return;
+      }
     }
     if (authMode === 'signup' && name.trim() === '') {
       setErrorMessage('Please enter your full name to create an account.');
@@ -50,8 +63,8 @@ export const LoginModal = () => {
       setErrorMessage('Please enter the 4-digit code.');
       return;
     }
-    const success = await verifyOtp(otp, name);
-    if (!success) {
+    const result = await verifyOtp(otp, name, authMode);
+    if (!result?.success) {
       setErrorMessage('Invalid verification code. Try again or enter 1234.');
     } else {
       setStep(1);
@@ -86,13 +99,15 @@ export const LoginModal = () => {
             },
           ]}
         >
-          {/* Close / Skip Button */}
-          <TouchableOpacity
-            style={[styles.closeBtn, { backgroundColor: theme.backgroundLight }]}
-            onPress={dismissAuthModal}
-          >
-            <Ionicons name="close" size={20} color={theme.textHeading} />
-          </TouchableOpacity>
+          {/* Close Button only if user is already logged in */}
+          {isLoggedIn && (
+            <TouchableOpacity
+              style={[styles.closeBtn, { backgroundColor: theme.backgroundLight }]}
+              onPress={dismissAuthModal}
+            >
+              <Ionicons name="close" size={20} color={theme.textHeading} />
+            </TouchableOpacity>
+          )}
 
           {/* Mode Tabs: Create Account vs Sign In */}
           {step === 1 && (
@@ -188,7 +203,7 @@ export const LoginModal = () => {
               {step === 2
                 ? `A 4-digit code was sent to ${email}`
                 : authMode === 'signup'
-                ? 'Create your traveler account to save wishlists & track trips'
+                ? 'Please create an account to access Travel Explorer'
                 : 'Sign in to access your saved vacations & settings'}
             </Text>
           </View>
@@ -216,7 +231,7 @@ export const LoginModal = () => {
                         color: theme.textHeading,
                       },
                     ]}
-                    placeholder="e.g. Aarav Sharma"
+                    placeholder="e.g. Yashwanth Sai"
                     placeholderTextColor={theme.textMuted}
                     value={name}
                     onChangeText={setName}
@@ -271,18 +286,8 @@ export const LoginModal = () => {
                     ? 'Already have an account? '
                     : "Don't have an account yet? "}
                   <Text style={{ color: theme.primary, fontWeight: '700' }}>
-                    {authMode === 'signup' ? 'Sign In' : 'Create One'}
+                    {authMode === 'signup' ? 'Sign In' : 'Create One First'}
                   </Text>
-                </Text>
-              </TouchableOpacity>
-
-              {/* Guest Explore Shortcut */}
-              <TouchableOpacity
-                style={styles.guestLink}
-                onPress={dismissAuthModal}
-              >
-                <Text style={[styles.guestLinkText, { color: theme.textMuted }]}>
-                  Explore App as Guest
                 </Text>
               </TouchableOpacity>
             </View>
@@ -309,40 +314,36 @@ export const LoginModal = () => {
                 onChangeText={setOtp}
               />
 
-              {generatedOtp && (
-                <TouchableOpacity
-                  style={[
-                    styles.autoFillBtn,
-                    {
-                      backgroundColor: theme.primaryLight,
-                      borderColor: theme.cardBorder,
-                    },
-                  ]}
-                  onPress={handleAutoFill}
+              <TouchableOpacity
+                style={styles.autoFillHint}
+                onPress={handleAutoFill}
+              >
+                <Ionicons
+                  name="flash-outline"
+                  size={14}
+                  color={theme.primary}
+                />
+                <Text
+                  style={[styles.autoFillText, { color: theme.primary }]}
                 >
-                  <Ionicons name="flash" size={14} color={theme.primary} />
-                  <Text style={[styles.autoFillText, { color: theme.primary }]}>
-                    Auto-fill Code: {generatedOtp}
-                  </Text>
-                </TouchableOpacity>
-              )}
+                  Auto-fill demo OTP ({generatedOtp || '1234'})
+                </Text>
+              </TouchableOpacity>
 
               <TouchableOpacity
                 style={[styles.primaryBtn, { backgroundColor: theme.primary }]}
                 onPress={handleVerify}
               >
-                <Text style={styles.primaryBtnText}>
-                  {authMode === 'signup' ? 'Complete & Register' : 'Verify & Sign In'}
-                </Text>
-                <Ionicons name="checkmark-circle" size={18} color="#FFFFFF" />
+                <Text style={styles.primaryBtnText}>Verify & Proceed</Text>
+                <Ionicons name="checkmark-circle" size={16} color="#FFFFFF" />
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={styles.secondaryLink}
+                style={styles.resendBtn}
                 onPress={() => setStep(1)}
               >
-                <Text style={[styles.secondaryLinkText, { color: theme.primary }]}>
-                  Change Email or Re-enter Details
+                <Text style={[styles.resendText, { color: theme.textMuted }]}>
+                  ← Change Email or Name
                 </Text>
               </TouchableOpacity>
             </View>
@@ -356,46 +357,51 @@ export const LoginModal = () => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(25, 12, 26, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    zIndex: 999999,
   },
   modalContent: {
     width: '100%',
-    maxWidth: 390,
+    maxWidth: 380,
     borderRadius: 32,
-    padding: 24,
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.28,
-    shadowRadius: 20,
-    elevation: 10,
+    padding: 24,
     position: 'relative',
+    ...Platform.select({
+      web: {
+        boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+      },
+      default: {
+        elevation: 8,
+      },
+    }),
   },
   closeBtn: {
     position: 'absolute',
     top: 18,
     right: 18,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 10,
   },
   tabSwitch: {
     flexDirection: 'row',
-    borderRadius: 18,
+    borderRadius: 20,
     padding: 4,
-    marginBottom: 16,
+    marginBottom: 20,
+    width: '80%',
     alignSelf: 'center',
   },
   tabSwitchBtn: {
+    flex: 1,
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 14,
+    borderRadius: 16,
+    alignItems: 'center',
   },
   tabSwitchText: {
     fontSize: 12,
@@ -409,111 +415,105 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
-    borderWidth: 1,
+    marginBottom: 12,
   },
   title: {
     fontSize: 22,
     fontWeight: '800',
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
-    marginBottom: 4,
+    fontFamily: Platform.select({ ios: 'Georgia', android: 'serif', default: 'Georgia' }),
     textAlign: 'center',
+    marginBottom: 6,
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 13,
     textAlign: 'center',
-    lineHeight: 17,
+    lineHeight: 18,
+    paddingHorizontal: 12,
   },
   errorBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FDEDED',
-    padding: 10,
+    backgroundColor: '#FFEBEE',
     borderRadius: 12,
+    padding: 10,
     marginBottom: 14,
     gap: 8,
   },
   errorText: {
-    fontSize: 12,
     color: '#D32F2F',
+    fontSize: 12,
     fontWeight: '600',
+    flex: 1,
   },
   formContainer: {
-    gap: 12,
+    gap: 14,
   },
   inputLabel: {
     fontSize: 12,
     fontWeight: '700',
-    marginLeft: 4,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   input: {
-    borderRadius: 18,
-    paddingHorizontal: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 14,
-    borderWidth: 1,
   },
   otpInput: {
+    fontSize: 22,
+    letterSpacing: 12,
     textAlign: 'center',
-    fontSize: 24,
     fontWeight: '800',
-    letterSpacing: 10,
   },
-  autoFillBtn: {
+  autoFillHint: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
-    borderRadius: 12,
     gap: 6,
-    borderWidth: 1,
+    paddingVertical: 4,
   },
   autoFillText: {
     fontSize: 12,
-    fontWeight: '700',
+    fontWeight: '600',
   },
   primaryBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 14,
-    borderRadius: 20,
+    borderRadius: 18,
     gap: 8,
-    marginTop: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.25,
-    shadowRadius: 6,
+    marginTop: 6,
+    ...Platform.select({
+      web: {
+        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      },
+      default: {
+        elevation: 4,
+      },
+    }),
   },
   primaryBtnText: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
   },
   switchModeLink: {
     alignItems: 'center',
-    paddingVertical: 6,
+    paddingVertical: 8,
   },
   switchModeText: {
-    fontSize: 12,
+    fontSize: 13,
   },
-  guestLink: {
+  resendBtn: {
     alignItems: 'center',
-    paddingVertical: 4,
+    paddingVertical: 8,
   },
-  guestLinkText: {
-    fontSize: 12,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
-  },
-  secondaryLink: {
-    alignItems: 'center',
-    paddingVertical: 6,
-  },
-  secondaryLinkText: {
+  resendText: {
     fontSize: 12,
     fontWeight: '600',
   },

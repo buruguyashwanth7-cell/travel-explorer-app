@@ -19,7 +19,15 @@ import { useTrips } from '../context/TripsContext';
 
 export const ProfileScreen = ({ navigation }) => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
-  const { user, isLoggedIn, logout, setIsLoginModalVisible, setAuthMode, setNotificationMessage } = useAuth();
+  const {
+    user,
+    isLoggedIn,
+    logout,
+    setIsLoginModalVisible,
+    setAuthMode,
+    setNotificationMessage,
+    updateUserProfile,
+  } = useAuth();
   const { wishlist } = useWishlist();
   const {
     trips,
@@ -42,6 +50,32 @@ export const ProfileScreen = ({ navigation }) => {
   const [newTripDates, setNewTripDates] = useState('');
   const [newTripResort, setNewTripResort] = useState('');
   const [newTripStatus, setNewTripStatus] = useState('Planning');
+
+  // Edit Profile Modal State
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const [editName, setEditName] = useState(user?.name || 'Yashwanth Sai');
+  const [editEmail, setEditEmail] = useState(user?.email || 'buruguyashwanth7@gmail.com');
+  const [editPhone, setEditPhone] = useState(user?.phone || '+91 98765 43210');
+
+  const handleOpenEditProfile = () => {
+    setEditName(user?.name || 'Yashwanth Sai');
+    setEditEmail(user?.email || 'buruguyashwanth7@gmail.com');
+    setEditPhone(user?.phone || '+91 98765 43210');
+    setIsEditProfileModalOpen(true);
+  };
+
+  const handleSaveProfile = async () => {
+    if (!editName.trim()) {
+      setNotificationMessage('Please enter a valid name.');
+      return;
+    }
+    await updateUserProfile({
+      name: editName.trim(),
+      email: editEmail.trim(),
+      phone: editPhone.trim(),
+    });
+    setIsEditProfileModalOpen(false);
+  };
 
   const handleCreateTrip = () => {
     if (!newTripDestination.trim()) return;
@@ -189,6 +223,106 @@ export const ProfileScreen = ({ navigation }) => {
         </View>
       </Modal>
 
+      {/* Modal: Edit Profile & Account Details */}
+      <Modal
+        visible={isEditProfileModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setIsEditProfileModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
+          >
+            <View style={styles.modalHeader}>
+              <View style={styles.modalTitleRow}>
+                <Ionicons name="person-circle-outline" size={24} color={theme.primary} />
+                <Text style={[styles.modalTitle, { color: theme.textHeading, marginLeft: 8 }]}>
+                  Edit Profile Details
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => setIsEditProfileModalOpen(false)}
+                style={styles.modalCloseBtn}
+              >
+                <Ionicons name="close" size={20} color={theme.textHeading} />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Full Name
+            </Text>
+            <TextInput
+              style={[
+                styles.modalInput,
+                {
+                  backgroundColor: theme.backgroundLight,
+                  borderColor: theme.cardBorder,
+                  color: theme.textHeading,
+                },
+              ]}
+              placeholder="e.g. Yashwanth Sai"
+              placeholderTextColor={theme.textMuted}
+              value={editName}
+              onChangeText={setEditName}
+            />
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Email Address
+            </Text>
+            <TextInput
+              style={[
+                styles.modalInput,
+                {
+                  backgroundColor: theme.backgroundLight,
+                  borderColor: theme.cardBorder,
+                  color: theme.textHeading,
+                },
+              ]}
+              placeholder="e.g. buruguyashwanth7@gmail.com"
+              placeholderTextColor={theme.textMuted}
+              value={editEmail}
+              onChangeText={setEditEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Phone Number
+            </Text>
+            <TextInput
+              style={[
+                styles.modalInput,
+                {
+                  backgroundColor: theme.backgroundLight,
+                  borderColor: theme.cardBorder,
+                  color: theme.textHeading,
+                },
+              ]}
+              placeholder="e.g. +91 98765 43210"
+              placeholderTextColor={theme.textMuted}
+              value={editPhone}
+              onChangeText={setEditPhone}
+              keyboardType="phone-pad"
+            />
+
+            <TouchableOpacity
+              style={[styles.saveTripBtn, { backgroundColor: theme.primary, marginTop: 18 }]}
+              onPress={handleSaveProfile}
+            >
+              <Ionicons name="checkmark-circle" size={18} color="#FFFFFF" />
+              <Text style={styles.saveTripBtnText}>Save Profile Changes</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -227,11 +361,20 @@ export const ProfileScreen = ({ navigation }) => {
             </View>
           </View>
 
-          <Text style={[styles.userName, { color: theme.textHeading }]}>
-            {user?.name || 'Explorer Guest'}
-          </Text>
+          <View style={styles.userNameRow}>
+            <Text style={[styles.userName, { color: theme.textHeading }]}>
+              {user?.name || 'Yashwanth Sai'}
+            </Text>
+            <TouchableOpacity
+              style={[styles.editIconCircle, { backgroundColor: theme.primaryLight }]}
+              onPress={handleOpenEditProfile}
+            >
+              <Ionicons name="pencil" size={13} color={theme.primary} />
+            </TouchableOpacity>
+          </View>
+
           <Text style={[styles.userEmail, { color: theme.textMuted }]}>
-            {user?.email || 'Sign in to sync your trips & wishlist'}
+            {user?.email || 'buruguyashwanth7@gmail.com'}
           </Text>
 
           <View
@@ -245,7 +388,7 @@ export const ProfileScreen = ({ navigation }) => {
           >
             <Ionicons name="diamond-outline" size={13} color={theme.primary} />
             <Text style={[styles.tierText, { color: theme.primary }]}>
-              {user?.memberTier || 'Standard Explorer'}
+              {user?.memberTier || 'Gold Explorer'}
             </Text>
           </View>
 
@@ -286,11 +429,9 @@ export const ProfileScreen = ({ navigation }) => {
                 styles.editProfileBtn,
                 { backgroundColor: theme.backgroundLight },
               ]}
-              onPress={() => {
-                setAuthMode('signup');
-                setIsLoginModalVisible(true);
-              }}
+              onPress={handleOpenEditProfile}
             >
+              <Ionicons name="create-outline" size={15} color={theme.primary} style={{ marginRight: 6 }} />
               <Text style={[styles.editProfileText, { color: theme.primary }]}>
                 Edit Account Details
               </Text>
@@ -811,6 +952,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: '#FFFFFF',
+  },
+  userNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  editIconCircle: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   userName: {
     fontSize: 20,

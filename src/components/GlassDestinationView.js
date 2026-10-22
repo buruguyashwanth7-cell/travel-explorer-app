@@ -81,32 +81,6 @@ export const GlassDestinationView = ({
               activeOpacity={0.8}
               style={[
                 styles.modeTab,
-                viewMode === 'clay' && [
-                  styles.modeTabActive,
-                  { backgroundColor: placeTheme.clayAccent },
-                ],
-              ]}
-              onPress={() => setViewMode && setViewMode('clay')}
-            >
-              <Ionicons
-                name="cube"
-                size={11}
-                color={viewMode === 'clay' ? '#FFFFFF' : 'rgba(255,255,255,0.6)'}
-              />
-              <Text
-                style={[
-                  styles.modeTabText,
-                  viewMode === 'clay' && styles.modeTabTextActive,
-                ]}
-              >
-                Clay
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={[
-                styles.modeTab,
                 viewMode === 'classic' && [
                   styles.modeTabActive,
                   { backgroundColor: placeTheme.primaryAccent },

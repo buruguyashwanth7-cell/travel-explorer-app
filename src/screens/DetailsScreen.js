@@ -19,7 +19,6 @@ import { AttractionCard } from '../components/AttractionCard';
 import { fetchLiveWeather } from '../services/weatherService';
 import { getDestinationTheme } from '../constants/destinationThemes';
 import { GlassDestinationView } from '../components/GlassDestinationView';
-import { ClayDestinationView } from '../components/ClayDestinationView';
 
 export const DetailsScreen = ({ route, navigation }) => {
   const { destination } = route.params;
@@ -105,26 +104,7 @@ export const DetailsScreen = ({ route, navigation }) => {
     );
   }
 
-  // 2. Claymorphic Experience Studio (Cairo Style - Image 2)
-  if (viewMode === 'clay') {
-    return (
-      <ClayDestinationView
-        destination={destination}
-        placeTheme={placeTheme}
-        weatherData={weatherData}
-        isWeatherLoading={isWeatherLoading}
-        favorited={favorited}
-        toggleWishlist={toggleWishlist}
-        handleAddToJourneys={handleAddToJourneys}
-        handleOpenGoogleMaps={handleOpenGoogleMaps}
-        navigation={navigation}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-      />
-    );
-  }
-
-  // 3. Classic Detailed Overview (with top switcher)
+  // 2. Classic Detailed Overview (with top switcher)
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <ScrollView
@@ -170,29 +150,6 @@ export const DetailsScreen = ({ route, navigation }) => {
                   ]}
                 >
                   Glass HUD
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                activeOpacity={0.8}
-                style={[
-                  styles.classicTab,
-                  viewMode === 'clay' && { backgroundColor: placeTheme.clayAccent },
-                ]}
-                onPress={() => setViewMode('clay')}
-              >
-                <Ionicons
-                  name="cube"
-                  size={11}
-                  color={viewMode === 'clay' ? '#FFFFFF' : '#475569'}
-                />
-                <Text
-                  style={[
-                    styles.classicTabText,
-                    viewMode === 'clay' && styles.classicTabTextActive,
-                  ]}
-                >
-                  Clay
                 </Text>
               </TouchableOpacity>
 
