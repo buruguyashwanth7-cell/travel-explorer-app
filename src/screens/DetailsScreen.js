@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,17 +7,77 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  Linking,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useTrips } from '../context/TripsContext';
+import { useAuth } from '../context/AuthContext';
 import { AttractionCard } from '../components/AttractionCard';
+import { fetchLiveWeather } from '../services/weatherService';
 
 export const DetailsScreen = ({ route, navigation }) => {
   const { destination } = route.params;
   const { theme } = useTheme();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { addTrip, trips } = useTrips();
+  const { setNotificationMessage } = useAuth();
+
   const favorited = isInWishlist(destination.id);
+
+  // Live Weather State (Extension Challenge #2)
+  const [weatherData, setWeatherData] = useState(null);
+  const [isWeatherLoading, setIsWeatherLoading] = useState(true);
+
+  // Check if destination is already in journeys
+  const existingTrip = trips.find(
+    (t) => t.destination.toLowerCase().includes(destination.name.toLowerCase())
+  );
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadWeather = async () => {
+      setIsWeatherLoading(true);
+      const data = await fetchLiveWeather(
+        destination.latitude || 15.2993,
+        destination.longitude || 74.124,
+        destination.category
+      );
+      if (isMounted) {
+        setWeatherData(data);
+        setIsWeatherLoading(false);
+      }
+    };
+    loadWeather();
+    return () => {
+      isMounted = false;
+    };
+  }, [destination]);
+
+  // Google Maps Integration (Extension Challenge #3)
+  const handleOpenGoogleMaps = () => {
+    const query = encodeURIComponent(`${destination.name}, ${destination.location}`);
+    const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    Linking.openURL(url).catch((err) =>
+      console.warn('Failed to open Google Maps:', err)
+    );
+  };
+
+  // Add to My Journeys feature
+  const handleAddToJourneys = (status = 'Planning') => {
+    addTrip({
+      destination: `${destination.name} Vacation`,
+      location: destination.location,
+      dates: destination.bestTimeToVisit.split('&')[0].trim() + ' 2026',
+      status: status,
+      resort: 'Recommended Luxury Resort',
+    });
+    setNotificationMessage(
+      `🎉 ${destination.name} added to your journeys as ${status}!`
+    );
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -111,6 +171,136 @@ export const DetailsScreen = ({ route, navigation }) => {
               </Text>
             </View>
           </View>
+
+          {/* LIVE WEATHER INTEGRATION (Extension Challenge #2) */}
+          <View
+            style={[
+              styles.weatherCard,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
+          >
+            <View style={styles.weatherHeaderRow}>
+              <View
+                style={[
+                  styles.liveIndicatorPill,
+                  { backgroundColor: theme.primaryLight },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.pulsingDot,
+                    { backgroundColor: theme.primary },
+                  ]}
+                />
+                <Text
+                  style={[styles.liveIndicatorText, { color: theme.primary }]}
+                >
+                  LIVE WEATHER (OPEN-METEO)
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => {
+                  setIsWeatherLoading(true);
+                  fetchLiveWeather(
+                    destination.latitude,
+                    destination.longitude,
+                    destination.category
+                  ).then((d) => {
+                    setWeatherData(d);
+                    setIsWeatherLoading(false);
+                  });
+                }}
+              >
+                <Ionicons name="refresh" size={16} color={theme.primary} />
+              </TouchableOpacity>
+            </View>
+
+            {isWeatherLoading ? (
+              <View style={styles.weatherLoadingBox}>
+                <ActivityIndicator size="small" color={theme.primary} />
+                <Text
+                  style={[styles.weatherLoadingText, { color: theme.textMuted }]}
+                >
+                  Fetching live regional climate...
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.weatherContentRow}>
+                <View style={styles.weatherTempSection}>
+                  <Ionicons
+                    name={weatherData?.iconName || 'partly-sunny'}
+                    size={36}
+                    color={theme.primary}
+                  />
+                  <Text
+                    style={[
+                      styles.temperatureText,
+                      { color: theme.textHeading },
+                    ]}
+                  >
+                    {weatherData?.temperature}°C
+                  </Text>
+                </View>
+
+                <View style={styles.weatherDetailsSection}>
+                  <Text
+                    style={[
+                      styles.weatherConditionText,
+                      { color: theme.textHeading },
+                    ]}
+                  >
+                    {weatherData?.condition}
+                  </Text>
+                  <Text
+                    style={[styles.weatherSubMetrics, { color: theme.textMuted }]}
+                  >
+                    Humidity: {weatherData?.humidity}% • Wind: {weatherData?.windSpeed} km/h
+                  </Text>
+                </View>
+              </View>
+            )}
+          </View>
+
+          {/* GOOGLE MAPS INTEGRATION (Extension Challenge #3) */}
+          <TouchableOpacity
+            style={[
+              styles.mapsIntegrationBtn,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
+            onPress={handleOpenGoogleMaps}
+            activeOpacity={0.88}
+          >
+            <View style={styles.mapsBtnLeft}>
+              <View
+                style={[
+                  styles.mapsIconCircle,
+                  { backgroundColor: '#E8F0FE' },
+                ]}
+              >
+                <Ionicons name="map" size={18} color="#1A73E8" />
+              </View>
+              <View>
+                <Text
+                  style={[styles.mapsBtnTitle, { color: theme.textHeading }]}
+                >
+                  View on Google Maps
+                </Text>
+                <Text
+                  style={[styles.mapsBtnSub, { color: theme.textMuted }]}
+                >
+                  Explore real satellite location, driving directions & navigation
+                </Text>
+              </View>
+            </View>
+            <Ionicons name="open-outline" size={18} color="#1A73E8" />
+          </TouchableOpacity>
 
           {/* Quick Metrics Cards */}
           <View style={styles.metricsRow}>
@@ -249,7 +439,7 @@ export const DetailsScreen = ({ route, navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Sticky Bottom Action */}
+      {/* Sticky Bottom Actions: Plan Trip + Save to Wishlist */}
       <View
         style={[
           styles.stickyFooter,
@@ -262,25 +452,45 @@ export const DetailsScreen = ({ route, navigation }) => {
         <TouchableOpacity
           activeOpacity={0.88}
           style={[
-            styles.wishlistActionButton,
+            styles.planTripBtn,
             {
-              backgroundColor: favorited
-                ? theme.secondary
-                : theme.primary,
+              backgroundColor: existingTrip ? '#2E8540' : theme.primary,
+            },
+          ]}
+          onPress={() =>
+            existingTrip
+              ? setNotificationMessage(
+                  `Already in your journeys as ${existingTrip.status}!`
+                )
+              : handleAddToJourneys('Planning')
+          }
+        >
+          <Ionicons
+            name={existingTrip ? 'checkmark-circle' : 'airplane'}
+            size={18}
+            color="#FFFFFF"
+          />
+          <Text style={styles.actionBtnText}>
+            {existingTrip ? `In Journeys (${existingTrip.status})` : 'Plan This Journey'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.88}
+          style={[
+            styles.saveBtnCircle,
+            {
+              backgroundColor: favorited ? theme.secondary : theme.cardSurface,
+              borderColor: theme.cardBorder,
             },
           ]}
           onPress={() => toggleWishlist(destination)}
         >
           <Ionicons
             name={favorited ? 'heart' : 'heart-outline'}
-            size={18}
-            color="#FFFFFF"
-            style={styles.actionBtnIcon}
+            size={20}
+            color={favorited ? theme.heart : theme.textHeading}
           />
-          <Text style={styles.actionBtnText}>
-            {favorited ? 'Remove from Saved' : 'Save to Wishlist'}
-          </Text>
-          <Ionicons name="arrow-forward" size={16} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
     </View>
@@ -392,6 +602,111 @@ const styles = StyleSheet.create({
   reviewCount: {
     fontSize: 12,
   },
+  weatherCard: {
+    borderRadius: 22,
+    padding: 16,
+    marginBottom: 14,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  weatherHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  liveIndicatorPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+    gap: 6,
+  },
+  pulsingDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  liveIndicatorText: {
+    fontSize: 9,
+    fontWeight: '800',
+    letterSpacing: 0.6,
+  },
+  weatherLoadingBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 10,
+  },
+  weatherLoadingText: {
+    fontSize: 12,
+  },
+  weatherContentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  weatherTempSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  temperatureText: {
+    fontSize: 28,
+    fontWeight: '800',
+  },
+  weatherDetailsSection: {
+    alignItems: 'flex-end',
+  },
+  weatherConditionText: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  weatherSubMetrics: {
+    fontSize: 11,
+    marginTop: 2,
+  },
+  mapsIntegrationBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 20,
+    padding: 14,
+    borderWidth: 1,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  mapsBtnLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  mapsIconCircle: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mapsBtnTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  mapsBtnSub: {
+    fontSize: 11,
+    marginTop: 1,
+    maxWidth: 240,
+  },
   metricsRow: {
     flexDirection: 'row',
     gap: 10,
@@ -484,27 +799,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderTopWidth: 1,
+    flexDirection: 'row',
+    gap: 12,
   },
-  wishlistActionButton: {
+  planTripBtn: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 15,
-    paddingHorizontal: 24,
     borderRadius: 28,
-    gap: 10,
+    gap: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
   },
-  actionBtnIcon: {
-    marginRight: 4,
+  saveBtnCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
   },
   actionBtnText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0.3,
   },

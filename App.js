@@ -6,6 +6,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider, useTheme } from './src/context/ThemeContext';
 import { AuthProvider } from './src/context/AuthContext';
 import { WishlistProvider } from './src/context/WishlistContext';
+import { TripsProvider } from './src/context/TripsContext';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { MobileFrame } from './src/components/MobileFrame';
 import { LoginModal } from './src/components/LoginModal';
@@ -33,7 +34,9 @@ export default function App() {
       <ThemeProvider>
         <AuthProvider>
           <WishlistProvider>
-            <MainApp />
+            <TripsProvider>
+              <MainApp />
+            </TripsProvider>
           </WishlistProvider>
         </AuthProvider>
       </ThemeProvider>

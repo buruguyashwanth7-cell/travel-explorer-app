@@ -12,6 +12,8 @@ export const destinationsData = [
   // --- BEACHES ---
   {
     id: '1',
+    latitude: 15.2993,
+    longitude: 74.124,
     name: 'Goa',
     subtitle: 'Sun, Sand & Portuguese Charm',
     location: 'Goa, India',
@@ -56,6 +58,8 @@ export const destinationsData = [
   },
   {
     id: '17',
+    latitude: 11.9416,
+    longitude: 79.8083,
     name: 'Pondicherry',
     subtitle: 'French Riviera of the East',
     location: 'Puducherry, India',
@@ -100,6 +104,8 @@ export const destinationsData = [
   },
   {
     id: '5',
+    latitude: 11.6234,
+    longitude: 92.7265,
     name: 'Andaman & Nicobar',
     subtitle: 'Turquoise Waters & Coral Reefs',
     location: 'Bay of Bengal, India',
@@ -144,6 +150,8 @@ export const destinationsData = [
   },
   {
     id: '9',
+    latitude: 14.5479,
+    longitude: 74.3188,
     name: 'Gokarna',
     subtitle: 'Serene Beaches & Om Sacred Shores',
     location: 'Karnataka, India',
@@ -190,6 +198,8 @@ export const destinationsData = [
   // --- MOUNTAINS ---
   {
     id: '2',
+    latitude: 32.2432,
+    longitude: 77.1892,
     name: 'Manali',
     subtitle: 'Snow Peaks & Whispering Pines',
     location: 'Himachal Pradesh, India',
@@ -234,6 +244,8 @@ export const destinationsData = [
   },
   {
     id: '6',
+    latitude: 10.0889,
+    longitude: 77.0595,
     name: 'Munnar',
     subtitle: 'Rolling Emerald Tea Gardens',
     location: 'Kerala, India',
@@ -278,6 +290,8 @@ export const destinationsData = [
   },
   {
     id: '11',
+    latitude: 27.041,
+    longitude: 88.2663,
     name: 'Darjeeling',
     subtitle: 'Queen of the Hills & Kanchenjunga',
     location: 'West Bengal, India',
@@ -324,6 +338,8 @@ export const destinationsData = [
   // --- HERITAGE ---
   {
     id: '3',
+    latitude: 26.9124,
+    longitude: 75.7873,
     name: 'Jaipur',
     subtitle: 'The Royal Pink City',
     location: 'Rajasthan, India',
@@ -368,6 +384,8 @@ export const destinationsData = [
   },
   {
     id: '7',
+    latitude: 15.335,
+    longitude: 76.46,
     name: 'Hampi',
     subtitle: 'Timeless UNESCO Boulders & Temples',
     location: 'Karnataka, India',
@@ -414,6 +432,8 @@ export const destinationsData = [
   // --- RELIGIOUS & SPIRITUAL ---
   {
     id: '15',
+    latitude: 25.3176,
+    longitude: 82.9739,
     name: 'Varanasi',
     subtitle: 'The Spiritual Capital of Light',
     location: 'Uttar Pradesh, India',
@@ -458,6 +478,8 @@ export const destinationsData = [
   },
   {
     id: '18',
+    latitude: 13.6288,
+    longitude: 79.4192,
     name: 'Tirupati',
     subtitle: 'Sacred Abode of Lord Venkateswara',
     location: 'Andhra Pradesh, India',
@@ -502,6 +524,8 @@ export const destinationsData = [
   },
   {
     id: '16',
+    latitude: 31.634,
+    longitude: 74.8723,
     name: 'Amritsar',
     subtitle: 'Golden Temple & Living Heritage',
     location: 'Punjab, India',
@@ -548,6 +572,8 @@ export const destinationsData = [
   // --- ADVENTURE ---
   {
     id: '4',
+    latitude: 30.0869,
+    longitude: 78.2676,
     name: 'Rishikesh',
     subtitle: 'River Rapids & Himalayan Serenity',
     location: 'Uttarakhand, India',
@@ -592,6 +618,8 @@ export const destinationsData = [
   },
   {
     id: '8',
+    latitude: 34.1526,
+    longitude: 77.5771,
     name: 'Leh-Ladakh',
     subtitle: 'The Land of High Passes',
     location: 'Ladakh, India',
@@ -638,6 +666,8 @@ export const destinationsData = [
   // --- WILDLIFE ---
   {
     id: '14',
+    latitude: 29.53,
+    longitude: 78.7747,
     name: 'Jim Corbett National Park',
     subtitle: 'Kingdom of the Royal Bengal Tiger',
     location: 'Uttarakhand, India',

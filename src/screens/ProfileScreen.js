@@ -7,58 +7,188 @@ import {
   Image,
   TouchableOpacity,
   Switch,
+  TextInput,
+  Modal,
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useTrips } from '../context/TripsContext';
 
 export const ProfileScreen = ({ navigation }) => {
   const { theme, isDarkMode, toggleTheme } = useTheme();
-  const { user, isLoggedIn, logout, setIsLoginModalVisible, setAuthMode } = useAuth();
+  const { user, isLoggedIn, logout, setIsLoginModalVisible, setAuthMode, setNotificationMessage } = useAuth();
   const { wishlist } = useWishlist();
+  const {
+    trips,
+    upcomingTrips,
+    completedTrips,
+    addTrip,
+    updateTripStatus,
+    cycleTripStatus,
+    deleteTrip,
+  } = useTrips();
 
   // Settings state
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [locationEnabled, setLocationEnabled] = useState(true);
   const [tripsTab, setTripsTab] = useState('upcoming'); // 'upcoming' or 'completed'
 
-  const userTrips = {
-    upcoming: [
-      {
-        id: 't1',
-        destination: 'Goa Coastal Escape',
-        dates: '15 Nov – 20 Nov 2026',
-        status: 'Confirmed',
-        resort: 'Taj Exotica Resort & Spa',
-      },
-      {
-        id: 't2',
-        destination: 'Pondicherry French Boulevard Tour',
-        dates: '12 Dec – 15 Dec 2026',
-        status: 'Planning',
-        resort: 'Villa Shanti Heritage Hotel',
-      },
-    ],
-    completed: [
-      {
-        id: 't3',
-        destination: 'Manali Alpine Winter Trek',
-        dates: 'Jan 2026',
-        rating: '5.0 ★',
-      },
-      {
-        id: 't4',
-        destination: 'Jaipur Royal Forts Tour',
-        dates: 'Oct 2025',
-        rating: '5.0 ★',
-      },
-    ],
+  // New Journey Modal State
+  const [isAddTripModalOpen, setIsAddTripModalOpen] = useState(false);
+  const [newTripDestination, setNewTripDestination] = useState('');
+  const [newTripDates, setNewTripDates] = useState('');
+  const [newTripResort, setNewTripResort] = useState('');
+  const [newTripStatus, setNewTripStatus] = useState('Planning');
+
+  const handleCreateTrip = () => {
+    if (!newTripDestination.trim()) return;
+    addTrip({
+      destination: newTripDestination.trim(),
+      dates: newTripDates.trim() || 'Nov 2026',
+      resort: newTripResort.trim() || 'Resort & Spa',
+      status: newTripStatus,
+      location: 'India',
+    });
+    setNotificationMessage(`✈️ Trip to ${newTripDestination} added to your journeys!`);
+    setNewTripDestination('');
+    setNewTripDates('');
+    setNewTripResort('');
+    setIsAddTripModalOpen(false);
   };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
+      {/* Modal: User Plans a New Journey */}
+      <Modal
+        visible={isAddTripModalOpen}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setIsAddTripModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: theme.cardSurface,
+                borderColor: theme.cardBorder,
+              },
+            ]}
+          >
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, { color: theme.textHeading }]}>
+                Plan a New Journey
+              </Text>
+              <TouchableOpacity
+                onPress={() => setIsAddTripModalOpen(false)}
+                style={styles.modalCloseBtn}
+              >
+                <Ionicons name="close" size={20} color={theme.textHeading} />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Destination Name
+            </Text>
+            <TextInput
+              style={[
+                styles.modalInput,
+                {
+                  backgroundColor: theme.backgroundLight,
+                  borderColor: theme.cardBorder,
+                  color: theme.textHeading,
+                },
+              ]}
+              placeholder="e.g. Pondicherry French Boulevard"
+              placeholderTextColor={theme.textMuted}
+              value={newTripDestination}
+              onChangeText={setNewTripDestination}
+            />
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Travel Dates
+            </Text>
+            <TextInput
+              style={[
+                styles.modalInput,
+                {
+                  backgroundColor: theme.backgroundLight,
+                  borderColor: theme.cardBorder,
+                  color: theme.textHeading,
+                },
+              ]}
+              placeholder="e.g. 15 Dec – 20 Dec 2026"
+              placeholderTextColor={theme.textMuted}
+              value={newTripDates}
+              onChangeText={setNewTripDates}
+            />
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Hotel / Stay (Optional)
+            </Text>
+            <TextInput
+              style={[
+                styles.modalInput,
+                {
+                  backgroundColor: theme.backgroundLight,
+                  borderColor: theme.cardBorder,
+                  color: theme.textHeading,
+                },
+              ]}
+              placeholder="e.g. Heritage Beach Villa"
+              placeholderTextColor={theme.textMuted}
+              value={newTripResort}
+              onChangeText={setNewTripResort}
+            />
+
+            <Text style={[styles.inputLabel, { color: theme.textHeading }]}>
+              Initial Status
+            </Text>
+            <View style={styles.statusOptionRow}>
+              {['Planning', 'Confirmed', 'Completed'].map((st) => (
+                <TouchableOpacity
+                  key={st}
+                  style={[
+                    styles.statusPillBtn,
+                    {
+                      backgroundColor:
+                        newTripStatus === st
+                          ? theme.primary
+                          : theme.backgroundLight,
+                      borderColor: theme.cardBorder,
+                    },
+                  ]}
+                  onPress={() => setNewTripStatus(st)}
+                >
+                  <Text
+                    style={[
+                      styles.statusPillBtnText,
+                      {
+                        color:
+                          newTripStatus === st ? '#FFFFFF' : theme.textBody,
+                      },
+                    ]}
+                  >
+                    {st}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity
+              style={[styles.saveTripBtn, { backgroundColor: theme.primary }]}
+              onPress={handleCreateTrip}
+            >
+              <Ionicons name="checkmark-circle" size={18} color="#FFFFFF" />
+              <Text style={styles.saveTripBtnText}>Add to My Journeys</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
@@ -168,7 +298,7 @@ export const ProfileScreen = ({ navigation }) => {
           )}
         </View>
 
-        {/* Stats Row */}
+        {/* Dynamic Traveler Stats Row */}
         <View style={styles.statsRow}>
           <View
             style={[
@@ -179,9 +309,11 @@ export const ProfileScreen = ({ navigation }) => {
               },
             ]}
           >
-            <Text style={[styles.statNumber, { color: theme.primary }]}>4</Text>
+            <Text style={[styles.statNumber, { color: theme.primary }]}>
+              {trips.length}
+            </Text>
             <Text style={[styles.statLabel, { color: theme.textMuted }]}>
-              Trips
+              Total Trips
             </Text>
           </View>
 
@@ -212,9 +344,11 @@ export const ProfileScreen = ({ navigation }) => {
               },
             ]}
           >
-            <Text style={[styles.statNumber, { color: theme.primary }]}>14</Text>
+            <Text style={[styles.statNumber, { color: theme.primary }]}>
+              {completedTrips.length}
+            </Text>
             <Text style={[styles.statLabel, { color: theme.textMuted }]}>
-              Reviews
+              Completed
             </Text>
           </View>
 
@@ -234,7 +368,7 @@ export const ProfileScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* My Trips Section (Requested: "profile should look like about their trips,whishlits,completed trips") */}
+        {/* INTERACTIVE USER JOURNEYS SECTION */}
         <View
           style={[
             styles.sectionCard,
@@ -245,12 +379,31 @@ export const ProfileScreen = ({ navigation }) => {
           ]}
         >
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: theme.textHeading }]}>
-              My Journeys
-            </Text>
+            <View>
+              <Text style={[styles.sectionTitle, { color: theme.textHeading }]}>
+                My Journeys
+              </Text>
+              <Text style={[styles.sectionSub, { color: theme.textMuted }]}>
+                Tap status pill to toggle Planning ⇄ Confirmed ⇄ Completed
+              </Text>
+            </View>
+
+            {/* User can add new trip directly */}
+            <TouchableOpacity
+              style={[
+                styles.addNewTripBtn,
+                { backgroundColor: theme.primaryLight },
+              ]}
+              onPress={() => setIsAddTripModalOpen(true)}
+            >
+              <Ionicons name="add" size={16} color={theme.primary} />
+              <Text style={[styles.addNewTripText, { color: theme.primary }]}>
+                Plan Trip
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          {/* Sub-tab pills */}
+          {/* Sub-tab switcher */}
           <View
             style={[
               styles.tripsToggleBar,
@@ -275,7 +428,7 @@ export const ProfileScreen = ({ navigation }) => {
                   },
                 ]}
               >
-                Upcoming Trips (2)
+                Upcoming Trips ({upcomingTrips.length})
               </Text>
             </TouchableOpacity>
 
@@ -297,14 +450,15 @@ export const ProfileScreen = ({ navigation }) => {
                   },
                 ]}
               >
-                Completed Trips (2)
+                Completed Trips ({completedTrips.length})
               </Text>
             </TouchableOpacity>
           </View>
 
+          {/* Upcoming or Completed List */}
           {tripsTab === 'upcoming' ? (
-            <View>
-              {userTrips.upcoming.map((trip) => (
+            upcomingTrips.length > 0 ? (
+              upcomingTrips.map((trip) => (
                 <View
                   key={trip.id}
                   style={[
@@ -320,6 +474,7 @@ export const ProfileScreen = ({ navigation }) => {
                   >
                     <Ionicons name="airplane" size={18} color={theme.primary} />
                   </View>
+
                   <View style={styles.tripInfo}>
                     <Text
                       style={[styles.tripName, { color: theme.textHeading }]}
@@ -332,52 +487,99 @@ export const ProfileScreen = ({ navigation }) => {
                       {trip.dates} • {trip.resort}
                     </Text>
                   </View>
-                  <View style={styles.statusChipConfirmed}>
+
+                  {/* Interactive Status Pill */}
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={[
+                      styles.statusPillInteractive,
+                      trip.status === 'Confirmed'
+                        ? styles.statusConfirmed
+                        : styles.statusPlanning,
+                    ]}
+                    onPress={() => cycleTripStatus(trip.id)}
+                  >
                     <Text style={styles.statusChipText}>{trip.status}</Text>
-                  </View>
+                    <Ionicons name="repeat-outline" size={11} color="#FFFFFF" />
+                  </TouchableOpacity>
+
+                  {/* Delete Trip Action */}
+                  <TouchableOpacity
+                    style={styles.deleteTripBtn}
+                    onPress={() => deleteTrip(trip.id)}
+                  >
+                    <Ionicons name="trash-outline" size={16} color="#D32F2F" />
+                  </TouchableOpacity>
                 </View>
-              ))}
-            </View>
-          ) : (
-            <View>
-              {userTrips.completed.map((trip) => (
+              ))
+            ) : (
+              <View style={styles.emptyTripsBox}>
+                <Ionicons name="airplane-outline" size={32} color={theme.textMuted} />
+                <Text style={[styles.emptyTripsText, { color: theme.textMuted }]}>
+                  No upcoming journeys yet. Tap "Plan Trip" above or explore destinations!
+                </Text>
+              </View>
+            )
+          ) : completedTrips.length > 0 ? (
+            completedTrips.map((trip) => (
+              <View
+                key={trip.id}
+                style={[
+                  styles.tripItem,
+                  { borderBottomColor: theme.cardBorder },
+                ]}
+              >
                 <View
-                  key={trip.id}
                   style={[
-                    styles.tripItem,
-                    { borderBottomColor: theme.cardBorder },
+                    styles.tripIconBox,
+                    { backgroundColor: '#E8F5E9' },
                   ]}
                 >
-                  <View
-                    style={[
-                      styles.tripIconBox,
-                      { backgroundColor: '#E8F5E9' },
-                    ]}
-                  >
-                    <Ionicons name="checkmark-done" size={18} color="#2E8540" />
-                  </View>
-                  <View style={styles.tripInfo}>
-                    <Text
-                      style={[styles.tripName, { color: theme.textHeading }]}
-                    >
-                      {trip.destination}
-                    </Text>
-                    <Text
-                      style={[styles.tripDates, { color: theme.textMuted }]}
-                    >
-                      {trip.dates} • Rated {trip.rating}
-                    </Text>
-                  </View>
-                  <View style={styles.statusChipCompleted}>
-                    <Text style={styles.statusChipTextCompleted}>Completed</Text>
-                  </View>
+                  <Ionicons name="checkmark-done" size={18} color="#2E8540" />
                 </View>
-              ))}
+
+                <View style={styles.tripInfo}>
+                  <Text
+                    style={[styles.tripName, { color: theme.textHeading }]}
+                  >
+                    {trip.destination}
+                  </Text>
+                  <Text
+                    style={[styles.tripDates, { color: theme.textMuted }]}
+                  >
+                    {trip.dates} • Completed
+                  </Text>
+                </View>
+
+                {/* Interactive Status Pill */}
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.statusCompletedPill}
+                  onPress={() => cycleTripStatus(trip.id)}
+                >
+                  <Text style={styles.statusChipText}>Completed</Text>
+                  <Ionicons name="repeat-outline" size={11} color="#FFFFFF" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.deleteTripBtn}
+                  onPress={() => deleteTrip(trip.id)}
+                >
+                  <Ionicons name="trash-outline" size={16} color="#D32F2F" />
+                </TouchableOpacity>
+              </View>
+            ))
+          ) : (
+            <View style={styles.emptyTripsBox}>
+              <Ionicons name="checkmark-done-circle-outline" size={32} color={theme.textMuted} />
+              <Text style={[styles.emptyTripsText, { color: theme.textMuted }]}>
+                No completed trips recorded yet. Once you complete a trip, mark it here!
+              </Text>
             </View>
           )}
         </View>
 
-        {/* Application Settings Section (Standard mobile settings) */}
+        {/* Application Settings Section */}
         <View
           style={[
             styles.sectionCard,
@@ -391,7 +593,7 @@ export const ProfileScreen = ({ navigation }) => {
             Application Settings
           </Text>
 
-          {/* FIXED DARK THEME BUTTON: Connects directly to toggleTheme() */}
+          {/* Working Dark Theme Toggle */}
           <View
             style={[styles.settingRow, { borderBottomColor: theme.cardBorder }]}
           >
@@ -480,35 +682,6 @@ export const ProfileScreen = ({ navigation }) => {
             <View style={styles.settingRight}>
               <Text style={[styles.settingValue, { color: theme.textMuted }]}>
                 INR (₹)
-              </Text>
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color={theme.textMuted}
-              />
-            </View>
-          </TouchableOpacity>
-
-          {/* Language Preference */}
-          <TouchableOpacity
-            style={[
-              styles.settingClickRow,
-              { borderBottomColor: theme.cardBorder },
-            ]}
-          >
-            <View style={styles.settingLeft}>
-              <Ionicons
-                name="language-outline"
-                size={20}
-                color={theme.primary}
-              />
-              <Text style={[styles.settingLabel, { color: theme.textHeading }]}>
-                Language
-              </Text>
-            </View>
-            <View style={styles.settingRight}>
-              <Text style={[styles.settingValue, { color: theme.textMuted }]}>
-                English (India)
               </Text>
               <Ionicons
                 name="chevron-forward"
@@ -732,13 +905,29 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '700',
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+  },
+  sectionSub: {
+    fontSize: 11,
+    marginTop: 2,
+  },
+  addNewTripBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+    gap: 4,
+  },
+  addNewTripText: {
+    fontSize: 11,
+    fontWeight: '700',
   },
   tripsToggleBar: {
     flexDirection: 'row',
@@ -761,6 +950,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
+    gap: 8,
   },
   tripIconBox: {
     width: 36,
@@ -768,7 +958,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
   },
   tripInfo: {
     flex: 1,
@@ -781,27 +970,48 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: 2,
   },
-  statusChipConfirmed: {
-    backgroundColor: '#E8F5E9',
+  statusPillInteractive: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    gap: 4,
   },
-  statusChipCompleted: {
-    backgroundColor: '#EDE7F6',
+  statusConfirmed: {
+    backgroundColor: '#2E8540',
+  },
+  statusPlanning: {
+    backgroundColor: '#E6923C',
+  },
+  statusCompletedPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#673AB7',
     paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    gap: 4,
   },
   statusChipText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#2E8540',
+    color: '#FFFFFF',
   },
-  statusChipTextCompleted: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#673AB7',
+  deleteTripBtn: {
+    padding: 6,
+  },
+  emptyTripsBox: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    gap: 8,
+  },
+  emptyTripsText: {
+    fontSize: 12,
+    textAlign: 'center',
+    paddingHorizontal: 20,
+    lineHeight: 18,
   },
   settingRow: {
     flexDirection: 'row',
@@ -855,5 +1065,77 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#D32F2F',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(25, 12, 26, 0.7)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalCard: {
+    width: '100%',
+    maxWidth: 380,
+    borderRadius: 28,
+    padding: 22,
+    borderWidth: 1,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+  },
+  modalCloseBtn: {
+    padding: 4,
+  },
+  inputLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 4,
+    marginTop: 6,
+  },
+  modalInput: {
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 13,
+    borderWidth: 1,
+  },
+  statusOptionRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 4,
+    marginBottom: 14,
+  },
+  statusPillBtn: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
+  statusPillBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  saveTripBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 13,
+    borderRadius: 18,
+    gap: 8,
+    marginTop: 6,
+  },
+  saveTripBtnText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '700',
   },
 });
