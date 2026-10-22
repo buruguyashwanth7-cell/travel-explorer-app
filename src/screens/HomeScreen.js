@@ -4,9 +4,8 @@ import {
   View,
   Text,
   ScrollView,
-  TextInput,
   TouchableOpacity,
-  FlatList,
+  Image,
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,9 +13,14 @@ import { colors } from '../constants/colors';
 import { destinationsData, categories } from '../constants/destinationsData';
 import { CategoryPill } from '../components/CategoryPill';
 import { DestinationCard } from '../components/DestinationCard';
+import { LocationPrompt } from '../components/LocationPrompt';
+import { useAuth } from '../context/AuthContext';
 
 export const HomeScreen = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [userLocation, setUserLocation] = useState('Hyderabad, India');
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const { user, setIsLoginModalVisible } = useAuth();
 
   const filteredDestinations =
     selectedCategory === 'All'
@@ -27,25 +31,54 @@ export const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      {/* Location Access Permission Prompt */}
+      <LocationPrompt
+        visible={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        onPermissionGranted={(loc) => setUserLocation(loc)}
+      />
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Top Header Bar inspired by Reference Mockup */}
+        {/* Top App Header with Location & Profile Avatar */}
         <View style={styles.headerBar}>
           <View style={styles.headerLeft}>
-            <Text style={styles.subGreeting}>Where Heritage Meets Beauty</Text>
+            {/* Location Selector Chip */}
+            <TouchableOpacity
+              style={styles.locationSelector}
+              onPress={() => setIsLocationModalOpen(true)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="location-sharp" size={14} color={colors.primary} />
+              <Text style={styles.locationCityText}>{userLocation}</Text>
+              <Ionicons name="chevron-down" size={13} color={colors.primary} />
+            </TouchableOpacity>
+
             <Text style={styles.mainHeading}>Incredible India</Text>
           </View>
+
+          {/* User Profile / Sign In Quick Button */}
           <TouchableOpacity
-            style={styles.headerActionBtn}
-            onPress={() => navigation.navigate('WishlistTab')}
+            style={styles.avatarButton}
+            onPress={() => {
+              if (user) {
+                navigation.navigate('ProfileTab');
+              } else {
+                setIsLoginModalVisible(true);
+              }
+            }}
           >
-            <Ionicons name="heart" size={20} color={colors.primary} />
+            {user?.avatar ? (
+              <Image source={{ uri: user.avatar }} style={styles.avatarMini} />
+            ) : (
+              <Ionicons name="person" size={20} color={colors.primary} />
+            )}
           </TouchableOpacity>
         </View>
 
-        {/* Search Bar Banner */}
+        {/* Live Search Shortcut */}
         <TouchableOpacity
           activeOpacity={0.9}
           style={styles.searchBar}
@@ -57,21 +90,23 @@ export const HomeScreen = ({ navigation }) => {
             color={colors.primary}
             style={styles.searchIcon}
           />
-          <Text style={styles.searchPlaceholder}>Search destinations, cities, or states...</Text>
+          <Text style={styles.searchPlaceholder}>
+            Search beaches, mountain retreats, temples & safari...
+          </Text>
           <View style={styles.filterChip}>
             <Ionicons name="options-outline" size={16} color={colors.primary} />
           </View>
         </TouchableOpacity>
 
-        {/* Hero Featured Card (Claymorphic highlight banner) */}
+        {/* Hero Wonder Banner */}
         <View style={styles.heroBanner}>
           <View style={styles.heroCardContent}>
             <View style={styles.heroTagBadge}>
-              <Text style={styles.heroTagText}>FEATURED WONDER</Text>
+              <Text style={styles.heroTagText}>CURATED WONDER</Text>
             </View>
             <Text style={styles.heroTitle}>Discover Jaipur</Text>
             <Text style={styles.heroSubtitle}>
-              Pink sandstone palaces, royal hill forts and timeless stories.
+              Pink sandstone palaces, royal hilltop forts and living Rajput splendor.
             </Text>
             <TouchableOpacity
               activeOpacity={0.85}
@@ -87,11 +122,11 @@ export const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Category Horizontal Filter Pills */}
+        {/* Explore Categories Horizontal Filter */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Explore Categories</Text>
           <TouchableOpacity onPress={() => navigation.navigate('SearchTab')}>
-            <Text style={styles.sectionAction}>View All</Text>
+            <Text style={styles.sectionAction}>View All ({categories.length})</Text>
           </TouchableOpacity>
         </View>
 
@@ -110,13 +145,13 @@ export const HomeScreen = ({ navigation }) => {
           ))}
         </ScrollView>
 
-        {/* Popular / Featured Destinations Carousel */}
+        {/* Featured Destinations Carousel */}
         {selectedCategory === 'All' && (
           <View style={styles.featuredSection}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Featured Destinations</Text>
+              <Text style={styles.sectionTitle}>Featured Getaways</Text>
               <Text style={styles.sectionBadge}>
-                {featuredDestinations.length} places
+                {featuredDestinations.length} hand-picked
               </Text>
             </View>
 
@@ -147,7 +182,7 @@ export const HomeScreen = ({ navigation }) => {
               : `${selectedCategory} Getaways`}
           </Text>
           <Text style={styles.sectionBadge}>
-            {filteredDestinations.length} found
+            {filteredDestinations.length} destinations
           </Text>
         </View>
 
@@ -183,17 +218,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    marginTop: 8,
+    marginTop: 6,
   },
   headerLeft: {
     flex: 1,
   },
-  subGreeting: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.primaryMuted,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+  locationSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    backgroundColor: '#FDEEF1',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 14,
+    gap: 5,
+    borderWidth: 1,
+    borderColor: '#F1D8DF',
+    marginBottom: 4,
+  },
+  locationCityText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.primary,
   },
   mainHeading: {
     fontSize: 28,
@@ -202,20 +248,25 @@ const styles = StyleSheet.create({
     marginTop: 2,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
-  headerActionBtn: {
+  avatarButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: '#F1DCE0',
     shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.08,
     shadowRadius: 6,
     elevation: 3,
+    overflow: 'hidden',
+  },
+  avatarMini: {
+    width: '100%',
+    height: '100%',
   },
   searchBar: {
     flexDirection: 'row',
@@ -238,7 +289,7 @@ const styles = StyleSheet.create({
   },
   searchPlaceholder: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 12,
     color: colors.textMuted,
     fontWeight: '500',
   },
@@ -254,7 +305,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAF0F2',
     borderRadius: 28,
     padding: 20,
-    marginBottom: 24,
+    marginBottom: 22,
     borderWidth: 1,
     borderColor: '#F1D7DE',
     shadowColor: colors.shadowColor,

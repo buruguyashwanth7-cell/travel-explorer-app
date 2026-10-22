@@ -3,10 +3,13 @@ export const categories = [
   'Beaches',
   'Mountains',
   'Heritage',
-  'Adventure'
+  'Adventure',
+  'Wildlife',
+  'Spiritual',
 ];
 
 export const destinationsData = [
+  // --- BEACHES ---
   {
     id: '1',
     name: 'Goa',
@@ -43,123 +46,6 @@ export const destinationsData = [
         tag: 'Four-Tier Waterfall',
         image: 'https://images.unsplash.com/photo-1586053226626-febc8817769e?auto=format&fit=crop&w=600&q=80',
         description: 'Spectacular multi-tiered cascade gushing through the lush Western Ghats.'
-      }
-    ]
-  },
-  {
-    id: '2',
-    name: 'Manali',
-    subtitle: 'Snow Peaks & Whispering Pines',
-    location: 'Himachal Pradesh, India',
-    state: 'Himachal Pradesh',
-    category: 'Mountains',
-    image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.7,
-    reviews: '2.8k',
-    bestTimeToVisit: 'March to June & Dec to Feb',
-    shortDescription: 'High altitude Himalayan resort town offering scenic mountain views, snowy valleys, and alpine charm.',
-    fullDescription: 'Set beside the gushing Beas River, Manali is a gateway to the high Himalayas. Famous for snow-dusted pine valleys, wooden cottages, tranquil Buddhist monasteries, and adrenaline sports in the Solang Valley.',
-    featured: true,
-    tagline: 'Valley of the Gods',
-    attractions: [
-      {
-        id: 'a4',
-        name: 'Solang Valley',
-        tag: 'Skiing & Paragliding',
-        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-        description: 'Action-packed valley with thrilling winter sports, zorbing, and cable cars.'
-      },
-      {
-        id: 'a5',
-        name: 'Rohtang Pass',
-        tag: 'Glacier Panorama',
-        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80',
-        description: 'High mountain pass connecting Kullu to the mystical Spiti and Lahaul valleys.'
-      },
-      {
-        id: 'a6',
-        name: 'Hadimba Temple',
-        tag: 'Ancient Cedar Shrine',
-        image: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=600&q=80',
-        description: 'Pagoda-style wooden temple built in 1553 surrounded by towering deodar trees.'
-      }
-    ]
-  },
-  {
-    id: '3',
-    name: 'Jaipur',
-    subtitle: 'The Royal Pink City',
-    location: 'Rajasthan, India',
-    state: 'Rajasthan',
-    category: 'Heritage',
-    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.9,
-    reviews: '4.1k',
-    bestTimeToVisit: 'October to March',
-    shortDescription: 'Historic royal capital celebrated for pink sandstone palaces, imposing hilltop forts, and Rajput splendor.',
-    fullDescription: 'Founded in 1727, Jaipur is part of the Golden Triangle. It enchants travelers with the honeycomb façade of Hawa Mahal, the hilltop fortress of Amber, grand courtyards, colorful textiles, and authentic Rajasthani hospitality.',
-    featured: true,
-    tagline: 'Splendor of Royalty',
-    attractions: [
-      {
-        id: 'a7',
-        name: 'Hawa Mahal',
-        tag: 'Palace of Winds',
-        image: 'https://images.unsplash.com/photo-1603288940300-4b82d3e91d58?auto=format&fit=crop&w=600&q=80',
-        description: 'Iconic five-storey pink facade featuring 953 intricately carved stone jharokhas.'
-      },
-      {
-        id: 'a8',
-        name: 'Amber Fort',
-        tag: 'Hilltop Citadel',
-        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
-        description: 'Majestic yellow-and-pink sandstone fort boasting the famous Sheesh Mahal mirror hall.'
-      },
-      {
-        id: 'a9',
-        name: 'City Palace',
-        tag: 'Royal Residence',
-        image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
-        description: 'Grand complex blending Rajput and Mughal architecture with stunning courtyards.'
-      }
-    ]
-  },
-  {
-    id: '4',
-    name: 'Rishikesh',
-    subtitle: 'River Rapids & Himalayan Serenity',
-    location: 'Uttarakhand, India',
-    state: 'Uttarakhand',
-    category: 'Adventure',
-    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80',
-    rating: 4.8,
-    reviews: '2.5k',
-    bestTimeToVisit: 'September to November & March to May',
-    shortDescription: 'World capital of Yoga and premier adventure destination on the banks of the turquoise holy Ganges.',
-    fullDescription: 'Tucked at the Himalayan foothills where the emerald Ganges flows through steep river valleys. Rishikesh is legendary for adrenaline-filled river rafting, suspension bridges, cliff jumping, peaceful ashrams, and magical evening Ganga Aarti.',
-    featured: true,
-    tagline: 'Adventure on the Ganges',
-    attractions: [
-      {
-        id: 'a10',
-        name: 'Ganga White Water Rafting',
-        tag: 'Grade III & IV Rapids',
-        image: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&fit=crop&w=600&q=80',
-        description: 'World-class white water rafting navigating famous rapids like Roller Coaster.'
-      },
-      {
-        id: 'a11',
-        name: 'Lakshman Jhula',
-        tag: 'Historic Suspension Bridge',
-        image: 'https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?auto=format&fit=crop&w=600&q=80',
-        description: 'Famous 450-foot iron suspension bridge spanning across the sacred river.'
-      },
-      {
-        id: 'a12',
-        name: 'Mohan Chatti Bungee',
-        tag: 'India’s Highest Bungee',
-        image: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=600&q=80',
-        description: 'Heart-pumping 83-meter plunge over a rocky river canyon with certified masters.'
       }
     ]
   },
@@ -203,6 +89,125 @@ export const destinationsData = [
     ]
   },
   {
+    id: '9',
+    name: 'Gokarna',
+    subtitle: 'Serene Beaches & Om Sacred Shores',
+    location: 'Karnataka, India',
+    state: 'Karnataka',
+    category: 'Beaches',
+    image: 'https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.7,
+    reviews: '1.6k',
+    bestTimeToVisit: 'October to March',
+    shortDescription: 'Laid-back coastal temple town famous for Om Beach, pristine cliffside trekking, and tranquil vibes.',
+    fullDescription: 'Gokarna offers a peaceful alternative to commercial coastlines. Its coastline forms the auspicious shape of the sacred Om symbol, complemented by rustic beach huts, cliffside cafes, and untouched golden shores.',
+    featured: false,
+    tagline: 'Soulful Coastal Escape',
+    attractions: [
+      {
+        id: 'a25',
+        name: 'Om Beach',
+        tag: 'Iconic Om Shape',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+        description: 'Naturally shaped like the spiritual Om symbol with dramatic rock formations.'
+      },
+      {
+        id: 'a26',
+        name: 'Kudle Beach',
+        tag: 'Sunset & Shacks',
+        image: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80',
+        description: 'Sprawling crescent beach framed by verdant cliffs and bohemian evening cafes.'
+      },
+      {
+        id: 'a27',
+        name: 'Mahabaleshwar Temple',
+        tag: '4th Century Dravidian',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+        description: 'Sacred classical stone temple enshrining the legendary Atmalinga of Shiva.'
+      }
+    ]
+  },
+  {
+    id: '10',
+    name: 'Varkala',
+    subtitle: 'Red Laterite Cliffs over Arabian Sea',
+    location: 'Kerala, India',
+    state: 'Kerala',
+    category: 'Beaches',
+    image: 'https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.8,
+    reviews: '2.2k',
+    bestTimeToVisit: 'November to March',
+    shortDescription: 'Dramatic coastal haven where dramatic red laterite cliffs plunge directly into the shimmering Arabian Sea.',
+    fullDescription: 'Varkala is Kerala’s cliffside gem. A pedestrian-only cliff-edge pathway boasts panoramic sunset views, organic bakeries, Ayurvedic wellness sanctuaries, and peaceful natural mineral water springs.',
+    featured: true,
+    tagline: 'Cliffside Coastal Sanctuary',
+    attractions: [
+      {
+        id: 'a28',
+        name: 'Varkala Cliff & Papanasam Beach',
+        tag: 'Natural Mineral Springs',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+        description: 'Holy beach where waters are believed to wash away sins, overlooked by red cliffs.'
+      },
+      {
+        id: 'a29',
+        name: 'Janardhana Swami Temple',
+        tag: '2000-Year Ancient Shrine',
+        image: 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=600&q=80',
+        description: 'Venerated seaside Vishnu temple renowned for historic Dutch bell and brass lamps.'
+      },
+      {
+        id: 'a30',
+        name: 'Kappil Lake & Beach',
+        tag: 'Backwater Confluence',
+        image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80',
+        description: 'Stunning estuary where tranquil Kerala backwaters meet the crashing sea waves.'
+      }
+    ]
+  },
+
+  // --- MOUNTAINS ---
+  {
+    id: '2',
+    name: 'Manali',
+    subtitle: 'Snow Peaks & Whispering Pines',
+    location: 'Himachal Pradesh, India',
+    state: 'Himachal Pradesh',
+    category: 'Mountains',
+    image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.7,
+    reviews: '2.8k',
+    bestTimeToVisit: 'March to June & Dec to Feb',
+    shortDescription: 'High altitude Himalayan resort town offering scenic mountain views, snowy valleys, and alpine charm.',
+    fullDescription: 'Set beside the gushing Beas River, Manali is a gateway to the high Himalayas. Famous for snow-dusted pine valleys, wooden cottages, tranquil Buddhist monasteries, and adrenaline sports in the Solang Valley.',
+    featured: true,
+    tagline: 'Valley of the Gods',
+    attractions: [
+      {
+        id: 'a4',
+        name: 'Solang Valley',
+        tag: 'Skiing & Paragliding',
+        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+        description: 'Action-packed valley with thrilling winter sports, zorbing, and cable cars.'
+      },
+      {
+        id: 'a5',
+        name: 'Rohtang Pass',
+        tag: 'Glacier Panorama',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80',
+        description: 'High mountain pass connecting Kullu to the mystical Spiti and Lahaul valleys.'
+      },
+      {
+        id: 'a6',
+        name: 'Hadimba Temple',
+        tag: 'Ancient Cedar Shrine',
+        image: 'https://images.unsplash.com/photo-1605649487212-47bdab064df7?auto=format&fit=crop&w=600&q=80',
+        description: 'Pagoda-style wooden temple built in 1553 surrounded by towering deodar trees.'
+      }
+    ]
+  },
+  {
     id: '6',
     name: 'Munnar',
     subtitle: 'Rolling Emerald Tea Gardens',
@@ -238,6 +243,86 @@ export const destinationsData = [
         tag: 'Tea Heritage Center',
         image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80',
         description: 'Historic demonstration factory showcasing traditional tea processing and tastings.'
+      }
+    ]
+  },
+  {
+    id: '11',
+    name: 'Darjeeling',
+    subtitle: 'Queen of the Hills & Kanchenjunga',
+    location: 'West Bengal, India',
+    state: 'West Bengal',
+    category: 'Mountains',
+    image: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.8,
+    reviews: '2.5k',
+    bestTimeToVisit: 'October to December & April to June',
+    shortDescription: 'World-famous tea gardens, vintage Himalayan Toy Train, and glorious views of Mount Kanchenjunga.',
+    fullDescription: 'Nestled in the Eastern Himalayas, Darjeeling is world-renowned for its aromatic champagne tea, British colonial estates, colorful Tibetan monasteries, and the UNESCO World Heritage mountain railway.',
+    featured: false,
+    tagline: 'Queen of the Himalayas',
+    attractions: [
+      {
+        id: 'a31',
+        name: 'Tiger Hill Sunrise',
+        tag: 'Kanchenjunga Vista',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80',
+        description: 'Breathtaking 360-degree dawn vantage point over snow peaks bathed in golden sunlight.'
+      },
+      {
+        id: 'a32',
+        name: 'Darjeeling Himalayan Railway',
+        tag: 'UNESCO Toy Train',
+        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+        description: 'Historic narrow-gauge steam engine winding through misty alpine loops and Batasia Loop.'
+      },
+      {
+        id: 'a33',
+        name: 'Happy Valley Tea Estate',
+        tag: '1854 Organic Estate',
+        image: 'https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=600&q=80',
+        description: 'One of the oldest high-altitude tea plantations producing prized muscatel teas.'
+      }
+    ]
+  },
+
+  // --- HERITAGE ---
+  {
+    id: '3',
+    name: 'Jaipur',
+    subtitle: 'The Royal Pink City',
+    location: 'Rajasthan, India',
+    state: 'Rajasthan',
+    category: 'Heritage',
+    image: 'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '4.1k',
+    bestTimeToVisit: 'October to March',
+    shortDescription: 'Historic royal capital celebrated for pink sandstone palaces, imposing hilltop forts, and Rajput splendor.',
+    fullDescription: 'Founded in 1727, Jaipur is part of the Golden Triangle. It enchants travelers with the honeycomb façade of Hawa Mahal, the hilltop fortress of Amber, grand courtyards, colorful textiles, and authentic Rajasthani hospitality.',
+    featured: true,
+    tagline: 'Splendor of Royalty',
+    attractions: [
+      {
+        id: 'a7',
+        name: 'Hawa Mahal',
+        tag: 'Palace of Winds',
+        image: 'https://images.unsplash.com/photo-1603288940300-4b82d3e91d58?auto=format&fit=crop&w=600&q=80',
+        description: 'Iconic five-storey pink facade featuring 953 intricately carved stone jharokhas.'
+      },
+      {
+        id: 'a8',
+        name: 'Amber Fort',
+        tag: 'Hilltop Citadel',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+        description: 'Majestic yellow-and-pink sandstone fort boasting the famous Sheesh Mahal mirror hall.'
+      },
+      {
+        id: 'a9',
+        name: 'City Palace',
+        tag: 'Royal Residence',
+        image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
+        description: 'Grand complex blending Rajput and Mughal architecture with stunning courtyards.'
       }
     ]
   },
@@ -281,6 +366,86 @@ export const destinationsData = [
     ]
   },
   {
+    id: '12',
+    name: 'Agra',
+    subtitle: 'Mughal Architectural Marvels',
+    location: 'Uttar Pradesh, India',
+    state: 'Uttar Pradesh',
+    category: 'Heritage',
+    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '5.2k',
+    bestTimeToVisit: 'October to March',
+    shortDescription: 'Home to the immortal Taj Mahal, Agra Fort, and masterpieces of Mughal dynasty craftsmanship.',
+    fullDescription: 'Resting on the banks of the Yamuna River, Agra is synonymous with the Taj Mahal—one of the Seven Wonders of the World. The ivory-white marble monument, red sandstone citadel of Agra Fort, and ghost city of Fatehpur Sikri narrate an imperial saga.',
+    featured: true,
+    tagline: 'Monument of Eternal Love',
+    attractions: [
+      {
+        id: 'a34',
+        name: 'Taj Mahal',
+        tag: 'World Wonder',
+        image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=600&q=80',
+        description: 'Peerless 17th-century white marble mausoleum commissioned by Emperor Shah Jahan.'
+      },
+      {
+        id: 'a35',
+        name: 'Agra Fort',
+        tag: 'Red Sandstone Citadel',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+        description: 'Massive Mughal fortress housing Jahangiri Mahal, Diwan-i-Khas, and imperial palaces.'
+      },
+      {
+        id: 'a36',
+        name: 'Mehtab Bagh',
+        tag: 'Moonlight River Gardens',
+        image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
+        description: 'Charbagh garden complex on the opposite riverbank with reflections of the Taj.'
+      }
+    ]
+  },
+
+  // --- ADVENTURE ---
+  {
+    id: '4',
+    name: 'Rishikesh',
+    subtitle: 'River Rapids & Himalayan Serenity',
+    location: 'Uttarakhand, India',
+    state: 'Uttarakhand',
+    category: 'Adventure',
+    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.8,
+    reviews: '2.5k',
+    bestTimeToVisit: 'September to November & March to May',
+    shortDescription: 'World capital of Yoga and premier adventure destination on the banks of the turquoise holy Ganges.',
+    fullDescription: 'Tucked at the Himalayan foothills where the emerald Ganges flows through steep river valleys. Rishikesh is legendary for adrenaline-filled river rafting, suspension bridges, cliff jumping, peaceful ashrams, and magical evening Ganga Aarti.',
+    featured: true,
+    tagline: 'Adventure on the Ganges',
+    attractions: [
+      {
+        id: 'a10',
+        name: 'Ganga White Water Rafting',
+        tag: 'Grade III & IV Rapids',
+        image: 'https://images.unsplash.com/photo-1530866495561-507c9faab2ed?auto=format&fit=crop&w=600&q=80',
+        description: 'World-class white water rafting navigating famous rapids like Roller Coaster.'
+      },
+      {
+        id: 'a11',
+        name: 'Lakshman Jhula',
+        tag: 'Historic Suspension Bridge',
+        image: 'https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?auto=format&fit=crop&w=600&q=80',
+        description: 'Famous 450-foot iron suspension bridge spanning across the sacred river.'
+      },
+      {
+        id: 'a12',
+        name: 'Mohan Chatti Bungee',
+        tag: 'India’s Highest Bungee',
+        image: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=600&q=80',
+        description: 'Heart-pumping 83-meter plunge over a rocky river canyon with certified masters.'
+      }
+    ]
+  },
+  {
     id: '8',
     name: 'Leh-Ladakh',
     subtitle: 'The Land of High Passes',
@@ -316,6 +481,166 @@ export const destinationsData = [
         tag: 'Double-Humped Camels & Dunes',
         image: 'https://images.unsplash.com/photo-1566837945700-30057527ade0?auto=format&fit=crop&w=600&q=80',
         description: 'Cold desert valley famous for Bactrian camels, sand dunes, and Diskit Monastery.'
+      }
+    ]
+  },
+  {
+    id: '13',
+    name: 'Spiti Valley',
+    subtitle: 'The Middle Land of Cold Desert',
+    location: 'Himachal Pradesh, India',
+    state: 'Himachal Pradesh',
+    category: 'Adventure',
+    image: 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '1.8k',
+    bestTimeToVisit: 'June to September',
+    shortDescription: 'Rugged terrain, high-altitude monasteries, star-studded milky way nights, and raw mountain trails.',
+    fullDescription: 'Spiti, meaning "The Middle Land" between India and Tibet, is an intrepid traveler’s paradise. Dramatic gorges, thousand-year-old Key Monastery perched on a hill pyramid, fossil villages, and world’s highest post office at Hikkim.',
+    featured: false,
+    tagline: 'Untamed Himalayan Wilderness',
+    attractions: [
+      {
+        id: 'a37',
+        name: 'Key Monastery',
+        tag: '11th Century Tibetan Gompa',
+        image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80',
+        description: 'Iconic fort-like monastery perched atop a rocky hill with ancient murals and thangkas.'
+      },
+      {
+        id: 'a38',
+        name: 'Chandratal Lake',
+        tag: 'Moon Crescent Alpine Lake',
+        image: 'https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=600&q=80',
+        description: 'Pristine turquoise glacial lake situated at 14,100 ft amidst the high peaks.'
+      },
+      {
+        id: 'a39',
+        name: 'Hikkim Village Post Office',
+        tag: 'World’s Highest Post Office',
+        image: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=600&q=80',
+        description: 'Send postcards stamped from 14,567 ft to anywhere in the world.'
+      }
+    ]
+  },
+
+  // --- WILDLIFE ---
+  {
+    id: '14',
+    name: 'Jim Corbett National Park',
+    subtitle: 'Kingdom of the Royal Bengal Tiger',
+    location: 'Uttarakhand, India',
+    state: 'Uttarakhand',
+    category: 'Wildlife',
+    image: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.8,
+    reviews: '3.1k',
+    bestTimeToVisit: 'November to June',
+    shortDescription: 'India’s oldest national park renowned for thrilling tiger safaris, sal forests, and elephant herds.',
+    fullDescription: 'Established in 1936, Jim Corbett is the birthplace of Project Tiger. Spanning riverside grasslands, dense sal forests, and foothills of the Himalayas, visitors encounter Royal Bengal tigers, wild Asian elephants, and over 600 species of birds.',
+    featured: true,
+    tagline: 'Wild Heart of Kumaon',
+    attractions: [
+      {
+        id: 'a40',
+        name: 'Dhikala Safari Zone',
+        tag: 'Core Tiger Territory',
+        image: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=600&q=80',
+        description: 'Vast riverine grassland offering unmatched sightings of Bengal tigers and wild tuskers.'
+      },
+      {
+        id: 'a41',
+        name: 'Corbett Waterfall',
+        tag: '66-ft Forest Cascade',
+        image: 'https://images.unsplash.com/photo-1586053226626-febc8817769e?auto=format&fit=crop&w=600&q=80',
+        description: 'Scenic forest waterfall nestled amidst teak groves and refreshing natural pools.'
+      },
+      {
+        id: 'a42',
+        name: 'Ramganga River Rafting & Watchtowers',
+        tag: 'Gharial & Bird Watching',
+        image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80',
+        description: 'Prime crocodile, gharial, and migratory water bird observation along the river.'
+      }
+    ]
+  },
+
+  // --- SPIRITUAL ---
+  {
+    id: '15',
+    name: 'Varanasi',
+    subtitle: 'The Spiritual Capital of Light',
+    location: 'Uttar Pradesh, India',
+    state: 'Uttar Pradesh',
+    category: 'Spiritual',
+    image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '4.8k',
+    bestTimeToVisit: 'October to March',
+    shortDescription: 'One of the world’s oldest living cities, celebrated for sacred Ganga Aarti, ghats, and Kashi Vishwanath.',
+    fullDescription: 'Varanasi (Kashi) is the soulful spiritual heart of India. Sitting on the crescent curve of the Holy Ganges, the ancient city illuminates with evening oil lamps, chanting priests during Maha Aarti, sunrise boat rituals, and sacred temples.',
+    featured: true,
+    tagline: 'City of Eternal Moksha',
+    attractions: [
+      {
+        id: 'a43',
+        name: 'Dashashwamedh Ghat Aarti',
+        tag: 'Mesmerizing Fire Ritual',
+        image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=600&q=80',
+        description: 'Grand evening prayer ritual with synchronized brass lamps, incense, and conch shells.'
+      },
+      {
+        id: 'a44',
+        name: 'Kashi Vishwanath Temple',
+        tag: 'Golden Temple of Shiva',
+        image: 'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=600&q=80',
+        description: 'One of the 12 sacred Jyotirlingas featuring magnificent 800-kg gold leaf spires.'
+      },
+      {
+        id: 'a45',
+        name: 'Assi Ghat Sunrise Boat Cruise',
+        tag: 'Sacred Dawn Rowing',
+        image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
+        description: 'Early morning traditional wooden boat journey past 84 stone ghats in morning mist.'
+      }
+    ]
+  },
+  {
+    id: '16',
+    name: 'Amritsar',
+    subtitle: 'Golden Temple & Living Heritage',
+    location: 'Punjab, India',
+    state: 'Punjab',
+    category: 'Spiritual',
+    image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=1200&q=80',
+    rating: 4.9,
+    reviews: '4.4k',
+    bestTimeToVisit: 'October to March',
+    shortDescription: 'Home to the magnificent gilded Harmandir Sahib (Golden Temple), holy nectar pool, and warm Punjabi culture.',
+    fullDescription: 'Amritsar is the spiritual and cultural center of the Sikh community. The Golden Temple gleams in the center of the Amrit Sarovar lake, serving free meals to over 100,000 visitors every day through the world’s largest community kitchen (Langar).',
+    featured: false,
+    tagline: 'Gilded Sanctuary of Peace',
+    attractions: [
+      {
+        id: 'a46',
+        name: 'Sri Harmandir Sahib',
+        tag: 'The Golden Temple',
+        image: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=600&q=80',
+        description: 'Pure gold-plated spiritual sanctum surrounded by the sacred pool of nectar.'
+      },
+      {
+        id: 'a47',
+        name: 'Wagah Border Ceremony',
+        tag: 'Electrifying Beating Retreat',
+        image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=600&q=80',
+        description: 'High-energy military parade and flag-lowering ceremony at the Indo-Pak border.'
+      },
+      {
+        id: 'a48',
+        name: 'Jallianwala Bagh',
+        tag: 'Historic Memorial Park',
+        image: 'https://images.unsplash.com/photo-1590076215667-873d31295245?auto=format&fit=crop&w=600&q=80',
+        description: 'Solemn national memorial preserving the historic Martyrs’ Well and bullet marks.'
       }
     ]
   }

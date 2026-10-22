@@ -9,6 +9,8 @@ const categoryIcons = {
   Mountains: 'trail-sign-outline',
   Heritage: 'business-outline',
   Adventure: 'compass-outline',
+  Wildlife: 'paw-outline',
+  Spiritual: 'flower-outline',
 };
 
 export const CategoryPill = ({ title, isSelected, onPress }) => {
